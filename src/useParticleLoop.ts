@@ -96,13 +96,16 @@ export function useParticleLoop(
         const drawX = p.x + p.springOffsetX
         const drawY = p.y + p.springOffsetY
 
+        const haloR = p.size + cfg.glowIntensity
+        const glow = ctx.createRadialGradient(drawX, drawY, 0, drawX, drawY, haloR)
+        glow.addColorStop(0, p.color)
+        glow.addColorStop(1, 'transparent')
+
         ctx.save()
         ctx.globalAlpha = p.opacity
-        ctx.shadowBlur = cfg.glowIntensity
-        ctx.shadowColor = p.color
-        ctx.fillStyle = p.color
+        ctx.fillStyle = glow
         ctx.beginPath()
-        ctx.arc(drawX, drawY, p.size, 0, Math.PI * 2)
+        ctx.arc(drawX, drawY, haloR, 0, Math.PI * 2)
         ctx.fill()
         ctx.restore()
       }
