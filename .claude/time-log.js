@@ -126,5 +126,85 @@ window.TIME_LOG_DATA = [
     "hours": 0.0,
     "who": "claude",
     "notes": "Final integrity check"
+  },
+  {
+    "datetime": "2026-06-14T12:05:48Z",
+    "phase": "0",
+    "step": "16",
+    "hours": 0.32458576777777776,
+    "who": "claude",
+    "notes": "Integration wizard — Git Flow, CCPM, VoltAgent, 10-theme design identity, GitHub repo + branch protection, pre-commit hooks"
+  },
+  {
+    "datetime": "2026-06-14T12:10:17Z",
+    "phase": "0",
+    "step": "16",
+    "hours": 0.2,
+    "who": "claude",
+    "notes": "Defined SPLIT-PLAN §1 (goals) and SPLIT-PLAN §2 (out of scope) interactively"
+  },
+  {
+    "datetime": "2026-06-14T12:24:35Z",
+    "phase": "1",
+    "step": "1",
+    "hours": 0.06956988333333333,
+    "who": "claude",
+    "notes": "Task 001 — Project scaffold: Vite library mode, TypeScript, package.json, ESLint, Prettier, npm install, build verified"
+  },
+  {
+    "datetime": "2026-06-14T12:25:29Z",
+    "phase": "1",
+    "step": "2",
+    "hours": 0.01336852,
+    "who": "claude",
+    "notes": "Task 002 — Particle engine: particles.ts data model + lifecycle, useParticleLoop hook with rAF loop, resize handling, canvas draw"
+  },
+  {
+    "datetime": "2026-06-14T12:25:36Z",
+    "phase": "1",
+    "step": "3",
+    "hours": 8.590555555555555e-06,
+    "who": "claude",
+    "notes": "Task 003 — Glow rendering: ctx.shadowBlur + shadowColor + radialGradient integrated into useParticleLoop draw loop"
+  },
+  {
+    "datetime": "2026-06-14T12:25:43Z",
+    "phase": "1",
+    "step": "4",
+    "hours": 8.403333333333333e-06,
+    "who": "claude",
+    "notes": "Task 004 — Mouse spring interaction: mouseRef tracking, applyMouseInfluence with decay spring in useParticleLoop"
+  },
+  {
+    "datetime": "2026-06-14T12:26:13Z",
+    "phase": "1",
+    "step": "5",
+    "hours": 0.005992508888888889,
+    "who": "claude",
+    "notes": "Task 005 — CosmicDustCanvas full props API: count, colors, minSize, maxSize, speed, glowIntensity, mouseInfluenceRadius, mouseEffect, SSR guard"
+  },
+  {
+    "datetime": "2026-06-14T12:33:54Z",
+    "phase": "1",
+    "step": "6",
+    "hours": 0.12673341083333334,
+    "who": "claude",
+    "notes": "Task 006 — Vitest tests: 13 tests across particles.test.ts and CosmicDustCanvas.test.tsx; fixed 6 blocking code-review findings (hooks violation, stale closures, listener leaks, untyped params, spring clamp)"
+  },
+  {
+    "datetime": "2026-06-14T12:35:26Z",
+    "phase": "1",
+    "step": "7",
+    "hours": 0.02207196388888889,
+    "who": "claude",
+    "notes": "Task 007 — Build config + publish prep: README with props table + examples, .npmignore, clean dist verified, gzip 7.83KB"
+  },
+  {
+    "datetime": "2026-06-14T12:37:20Z",
+    "phase": "1",
+    "step": "8",
+    "hours": 0.027982175277777778,
+    "who": "claude",
+    "notes": "Task 008 — Demo playground: demo/index.html, demo/src/App.tsx with 5 live controls (count, speed, glow, mouseRadius, mouseEffect), demo/vite.config.ts"
   }
 ];
