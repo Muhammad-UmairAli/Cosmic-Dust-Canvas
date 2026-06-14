@@ -35,3 +35,4 @@ Human-readable audit trail of actual hours per phase per step. The canonical dat
 | 2026-06-14 | 1 | 6 | 0.1267 | claude | Task 006 — Vitest tests: 13 tests across particles.test.ts and CosmicDustCanvas.test.tsx; fixed 6 blocking code-review findings (hooks violation, stale closures, listener leaks, untyped params, spring clamp) |
 | 2026-06-14 | 1 | 7 | 0.0221 | claude | Task 007 — Build config + publish prep: README with props table + examples, .npmignore, clean dist verified, gzip 7.83KB |
 | 2026-06-14 | 1 | 8 | 0.0280 | claude | Task 008 — Demo playground: demo/index.html, demo/src/App.tsx with 5 live controls (count, speed, glow, mouseRadius, mouseEffect), demo/vite.config.ts |
+| 2026-06-14 | 1 | 9 | 0.2500 | claude | Bug fix: replaced ctx.shadowBlur with manual radial-gradient glow; doubled spring force + raised clamp for visible mouseInfluenceRadius; all 16 tests pass |

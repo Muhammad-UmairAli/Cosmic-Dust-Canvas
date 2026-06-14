@@ -88,7 +88,7 @@
       },
       {
         "num": "15",
-        "name": "Append Phase 0 row to SPLIT-PLAN §5 (progress log)",
+        "name": "Append Phase 0 row to SPLIT-PLAN \u00a75 (progress log)",
         "h_baseline": 0.0,
         "h_ai": 0.0
       },
@@ -106,52 +106,59 @@
     "steps": [
       {
         "num": "1",
-        "name": "Task 001 — Project scaffold: Vite library mode, TypeScript, package.json, ESLint, Prettier, npm install, build verified",
+        "name": "Task 001 \u2014 Project scaffold: Vite library mode, TypeScript, package.json, ESLint, Prettier, npm install, build verified",
         "h_baseline": 1.5,
         "h_ai": 1.5
       },
       {
         "num": "2",
-        "name": "Task 002 — Particle engine: particles.ts data model + lifecycle, useParticleLoop hook with rAF loop, resize handling, canvas draw",
+        "name": "Task 002 \u2014 Particle engine: particles.ts data model + lifecycle, useParticleLoop hook with rAF loop, resize handling, canvas draw",
         "h_baseline": 2.0,
         "h_ai": 2.0
       },
       {
         "num": "3",
-        "name": "Task 003 — Glow rendering: ctx.shadowBlur + shadowColor + radialGradient integrated into useParticleLoop draw loop",
+        "name": "Task 003 \u2014 Glow rendering: ctx.shadowBlur + shadowColor + radialGradient integrated into useParticleLoop draw loop",
         "h_baseline": 1.0,
         "h_ai": 1.0
       },
       {
         "num": "4",
-        "name": "Task 004 — Mouse spring interaction: mouseRef tracking, applyMouseInfluence with decay spring in useParticleLoop",
+        "name": "Task 004 \u2014 Mouse spring interaction: mouseRef tracking, applyMouseInfluence with decay spring in useParticleLoop",
         "h_baseline": 1.5,
         "h_ai": 1.5
       },
       {
         "num": "5",
-        "name": "Task 005 — CosmicDustCanvas full props API: count, colors, minSize, maxSize, speed, glowIntensity, mouseInfluenceRadius, mouseEffect, SSR guard",
+        "name": "Task 005 \u2014 CosmicDustCanvas full props API: count, colors, minSize, maxSize, speed, glowIntensity, mouseInfluenceRadius, mouseEffect, SSR guard",
         "h_baseline": 1.5,
         "h_ai": 1.5
       },
       {
         "num": "6",
-        "name": "Task 006 — Vitest tests: 13 tests across particles.test.ts and CosmicDustCanvas.test.tsx; fixed 6 blocking code-review findings (hooks violation, stale closures, listener leaks, untyped params, spring clamp)",
+        "name": "Task 006 \u2014 Vitest tests: 13 tests across particles.test.ts and CosmicDustCanvas.test.tsx; fixed 6 blocking code-review findings (hooks violation, stale closures, listener leaks, untyped params, spring clamp)",
         "h_baseline": 1.5,
         "h_ai": 1.5
       },
       {
         "num": "7",
-        "name": "Task 007 — Build config + publish prep: README with props table + examples, .npmignore, clean dist verified, gzip 7.83KB",
+        "name": "Task 007 \u2014 Build config + publish prep: README with props table + examples, .npmignore, clean dist verified, gzip 7.83KB",
         "h_baseline": 1.0,
         "h_ai": 1.0
       },
       {
         "num": "8",
-        "name": "Task 008 — Demo playground: demo/index.html, demo/src/App.tsx with 5 live controls (count, speed, glow, mouseRadius, mouseEffect), demo/vite.config.ts",
+        "name": "Task 008 \u2014 Demo playground: demo/index.html, demo/src/App.tsx with 5 live controls (count, speed, glow, mouseRadius, mouseEffect), demo/vite.config.ts",
         "h_baseline": 1.0,
         "h_ai": 1.0
+      },
+      {
+        "num": "9",
+        "name": "Bug fix: replaced ctx.shadowBlur with manual radial-gradient glow; doubled spring force + raised clamp for visible mouseInfluenceRadius; all 16 tests pass",
+        "h_baseline": 0.25,
+        "h_ai": 0.25
       }
-    ]
+    ],
+    "completed": "2026-06-14"
   }
 }

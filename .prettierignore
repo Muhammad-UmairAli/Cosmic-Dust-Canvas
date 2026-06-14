@@ -1,6 +1,7 @@
 # Kit internals — not project source code
 .claude/
-docs/
+docs/methodology/
+docs/conventions/
 tools/
 dist/
 node_modules/

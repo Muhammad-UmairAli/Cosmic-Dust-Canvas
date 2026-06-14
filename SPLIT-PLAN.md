@@ -60,8 +60,7 @@ See [`docs/architecture-design-decisions.md`](docs/architecture-design-decisions
 
 ---
 
-| 2026-06-14 | Phase 1 — react-cosmic-dust-component | IN FLIGHT | (will be filled in at close) |
-
+| 2026-06-14 | Phase 1 — react-cosmic-dust-component | PR #1 merged (feature/react-cosmic-dust-component → develop). Shipped cosmic-dust-canvas npm package: Canvas+React+TypeScript particle engine, mouse spring physics (repel/attract/none), manual radial-gradient glow scaling with glowIntensity (0–40), 16 passing Vitest tests, Vite ESM+CJS build at 7.83 KB gzip. Post-merge bug fixes: ctx.shadowBlur replaced with radial-gradient halo (glow now visually responds to slider); spring force doubled + clamp raised (mouseInfluenceRadius clearly perceptible). Files NOT touched: demo/, .github/, docs/methodology/. Unblocks: npm publish to registry, Phase 2 feature work. | (closed) |
 ## §6 — Backlog
 
 <!--
