@@ -26,9 +26,13 @@ describe('CosmicDustCanvas', () => {
     const div = document.createElement('div')
     document.body.appendChild(div)
     const root = createRoot(div)
-    act(() => { root.render(<CosmicDustCanvas />) })
+    act(() => {
+      root.render(<CosmicDustCanvas />)
+    })
     expect(div.querySelector('canvas')).not.toBeNull()
-    act(() => { root.unmount() })
+    act(() => {
+      root.unmount()
+    })
     div.remove()
   })
 
@@ -37,8 +41,12 @@ describe('CosmicDustCanvas', () => {
     document.body.appendChild(div)
     const root = createRoot(div)
     expect(() => {
-      act(() => { root.render(<CosmicDustCanvas />) })
-      act(() => { root.unmount() })
+      act(() => {
+        root.render(<CosmicDustCanvas />)
+      })
+      act(() => {
+        root.unmount()
+      })
     }).not.toThrow()
     div.remove()
   })
@@ -47,9 +55,13 @@ describe('CosmicDustCanvas', () => {
     const div = document.createElement('div')
     document.body.appendChild(div)
     const root = createRoot(div)
-    act(() => { root.render(<CosmicDustCanvas count={50} />) })
+    act(() => {
+      root.render(<CosmicDustCanvas count={50} />)
+    })
     expect(div.querySelector('canvas')).not.toBeNull()
-    act(() => { root.unmount() })
+    act(() => {
+      root.unmount()
+    })
     div.remove()
   })
 })

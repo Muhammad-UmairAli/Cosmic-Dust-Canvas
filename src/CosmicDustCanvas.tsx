@@ -36,7 +36,10 @@ const DEFAULT_STYLE: React.CSSProperties = {
 }
 
 // Inner component that runs hooks unconditionally — only mounted client-side
-function CosmicDustCanvasInner(props: Required<Omit<CosmicDustCanvasProps, 'className' | 'style'>> & Pick<CosmicDustCanvasProps, 'className' | 'style'>) {
+function CosmicDustCanvasInner(
+  props: Required<Omit<CosmicDustCanvasProps, 'className' | 'style'>> &
+    Pick<CosmicDustCanvasProps, 'className' | 'style'>,
+) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
 
   useParticleLoop(canvasRef, {

@@ -46,7 +46,15 @@ export function useParticleLoop(
 
     setSize()
     const { count, colors, minSize, maxSize, speed } = configRef.current
-    particlesRef.current = spawnParticles(count, canvas.width, canvas.height, colors, minSize, maxSize, speed)
+    particlesRef.current = spawnParticles(
+      count,
+      canvas.width,
+      canvas.height,
+      colors,
+      minSize,
+      maxSize,
+      speed,
+    )
 
     // Cache gradients per color to avoid per-frame allocations
     const gradientCache = new Map<string, CanvasGradient>()
@@ -124,8 +132,8 @@ function applyMouseInfluence(
     return
   }
 
-  const dx = (p.x + p.springOffsetX) - mouse.x
-  const dy = (p.y + p.springOffsetY) - mouse.y
+  const dx = p.x + p.springOffsetX - mouse.x
+  const dy = p.y + p.springOffsetY - mouse.y
   const dist = Math.sqrt(dx * dx + dy * dy)
 
   if (dist < config.mouseInfluenceRadius && dist > 0) {

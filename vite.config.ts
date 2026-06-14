@@ -16,8 +16,7 @@ export default defineConfig({
     lib: {
       entry: resolve(__dirname, 'src/index.ts'),
       formats: ['es', 'cjs'],
-      fileName: (format) =>
-        `cosmic-dust-canvas.${format === 'es' ? 'js' : 'cjs'}`,
+      fileName: (format) => `cosmic-dust-canvas.${format === 'es' ? 'js' : 'cjs'}`,
     },
     rollupOptions: {
       external: ['react', 'react-dom', '@react-spring/web'],
