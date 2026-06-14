@@ -206,5 +206,13 @@ window.TIME_LOG_DATA = [
     "hours": 0.027982175277777778,
     "who": "claude",
     "notes": "Task 008 — Demo playground: demo/index.html, demo/src/App.tsx with 5 live controls (count, speed, glow, mouseRadius, mouseEffect), demo/vite.config.ts"
+  },
+  {
+    "datetime": "2026-06-14T13:05:39Z",
+    "phase": "1",
+    "step": "9",
+    "hours": 0.25,
+    "who": "claude",
+    "notes": "Bug fix: replaced ctx.shadowBlur with manual radial-gradient glow; doubled spring force + raised clamp for visible mouseInfluenceRadius; all 16 tests pass"
   }
 ];

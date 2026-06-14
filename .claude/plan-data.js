@@ -151,7 +151,14 @@ window.PLAN_DATA = {
         "name": "Task 008 — Demo playground: demo/index.html, demo/src/App.tsx with 5 live controls (count, speed, glow, mouseRadius, mouseEffect), demo/vite.config.ts",
         "h_baseline": 1.0,
         "h_ai": 1.0
+      },
+      {
+        "num": "9",
+        "name": "Bug fix: replaced ctx.shadowBlur with manual radial-gradient glow; doubled spring force + raised clamp for visible mouseInfluenceRadius; all 16 tests pass",
+        "h_baseline": 0.25,
+        "h_ai": 0.25
       }
-    ]
+    ],
+    "completed": "2026-06-14"
   }
 };
