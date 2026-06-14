@@ -18,8 +18,8 @@ _Project: `<your-project-name>`. Current state: Phase 0 — Project Init complet
 
 <!-- What this project is trying to achieve. Stable; rarely edited. -->
 
-- _Goal 1_
-- _Goal 2_
+- Generate hundreds of softly glowing particles that slowly drift across the screen and gently react to the user's mouse.
+- Ship as a reusable React component so users can drop cosmic dust into their own ReactJS projects.
 
 ---
 
@@ -27,7 +27,7 @@ _Project: `<your-project-name>`. Current state: Phase 0 — Project Init complet
 
 <!-- What this project is NOT. Defended actively. -->
 
-- _Out-of-scope 1_
+- _(none specified yet)_
 
 ---
 
@@ -43,10 +43,10 @@ See [`docs/architecture-design-decisions.md`](docs/architecture-design-decisions
 
 <!-- Names and values that must update in EVERY affected file when changed. When editing one of these, walk every row and update every file in it. -->
 
-| Concept | Files that must agree |
-|---|---|
-| _e.g. canonical project name_ | `README.md`, `CLAUDE.md`, `docs/DESIGN.md` |
-| `docs/DESIGN.md` | Visual identity — Binance, Ferrari, Shopify, Spotify, PlayStation, Airbnb, Nike, Slack, NVIDIA, Uber; theme picker mandate for VoltAgent |
+| Concept                       | Files that must agree                                                                                                                    |
+| ----------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| _e.g. canonical project name_ | `README.md`, `CLAUDE.md`, `docs/DESIGN.md`                                                                                               |
+| `docs/DESIGN.md`              | Visual identity — Binance, Ferrari, Shopify, Spotify, PlayStation, Airbnb, Nike, Slack, NVIDIA, Uber; theme picker mandate for VoltAgent |
 
 ---
 
@@ -54,12 +54,13 @@ See [`docs/architecture-design-decisions.md`](docs/architecture-design-decisions
 
 <!-- One-line pointer rows, one per closed phase. Full closure detail lives in docs/phases/phase-NNN.md for non-trivial phases. -->
 
-| Date | Phase | What was done | What is next |
-|---|---|---|---|
+| Date       | Phase                  | What was done                                                                | What is next                                |
+| ---------- | ---------------------- | ---------------------------------------------------------------------------- | ------------------------------------------- |
 | 2026-06-14 | Phase 0 — Project Init | Bootstrap via `init-project.sh`. See `TIME-LOG.md` Phase 0 rows for actuals. | Define SPLIT-PLAN §1 (goals); open Phase 1. |
 
 ---
 
+| 2026-06-14 | Phase 1 — react-cosmic-dust-component | PR #1 merged (feature/react-cosmic-dust-component → develop). Shipped cosmic-dust-canvas npm package: Canvas+React+TypeScript particle engine, mouse spring physics (repel/attract/none), manual radial-gradient glow scaling with glowIntensity (0–40), 16 passing Vitest tests, Vite ESM+CJS build at 7.83 KB gzip. Post-merge bug fixes: ctx.shadowBlur replaced with radial-gradient halo (glow now visually responds to slider); spring force doubled + clamp raised (mouseInfluenceRadius clearly perceptible). Files NOT touched: demo/, .github/, docs/methodology/. Unblocks: npm publish to registry, Phase 2 feature work. | (closed) |
 ## §6 — Backlog
 
 <!--

@@ -4,18 +4,18 @@ Fill in this document during Phase 0. AI assistants consult it before generating
 
 ## Log Analytics Workspaces
 
-| Purpose | Workspace name |
-|---|---|
-| Active monitoring (alerts + alerting enabled) | `<monitored-workspace>` |
-| Logging only (no alert rules) | `<unmonitored-workspace>` |
+| Purpose                                       | Workspace name            |
+| --------------------------------------------- | ------------------------- |
+| Active monitoring (alerts + alerting enabled) | `<monitored-workspace>`   |
+| Logging only (no alert rules)                 | `<unmonitored-workspace>` |
 
 ## Monitoring function
 
 The function that reads job stream failures and triggers automated restarts:
 
-| Field | Value |
-|---|---|
-| Name | `<monitoring-app>` |
+| Field                                         | Value               |
+| --------------------------------------------- | ------------------- |
+| Name                                          | `<monitoring-app>`  |
 | IAM role required on every monitored resource | Website Contributor |
 
 ## Application Insights naming
@@ -28,15 +28,15 @@ Example: prefix `AI-` produces `AI-Automations`, `AI-Billing`, etc.
 
 One row per Azure resource this project provisions. Add rows as resources are created; do not leave placeholders for resources that don't exist yet.
 
-| Resource name | Type | Tier | Log Analytics Workspace | App Insights name |
-|---|---|---|---|---|
-| _add rows_ | Function App / Web App / Automation Account | Monitored / Unmonitored | | |
+| Resource name | Type                                        | Tier                    | Log Analytics Workspace | App Insights name |
+| ------------- | ------------------------------------------- | ----------------------- | ----------------------- | ----------------- |
+| _add rows_    | Function App / Web App / Automation Account | Monitored / Unmonitored |                         |                   |
 
 ## Availability monitoring
 
-| Resource | Dead-man's-switch endpoint | Check-in interval |
-|---|---|---|
-| _add rows_ | | |
+| Resource   | Dead-man's-switch endpoint | Check-in interval |
+| ---------- | -------------------------- | ----------------- |
+| _add rows_ |                            |                   |
 
 ## Code conventions for this project
 

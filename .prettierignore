@@ -1,0 +1,13 @@
+# Kit internals — not project source code
+.claude/
+docs/methodology/
+docs/conventions/
+tools/
+dist/
+node_modules/
+DASHBOARD.html
+SPLIT-PLAN.md
+AGENT-LOG.md
+TIME-LOG.md
+TODO.md
+CLAUDE.md
