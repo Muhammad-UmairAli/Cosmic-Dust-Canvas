@@ -1,0 +1,104 @@
+window.PLAN_DATA = {
+  "0": {
+    "label": "Phase 0",
+    "steps": [
+      {
+        "num": "1",
+        "name": "Verify environment",
+        "h_baseline": 0.0,
+        "h_ai": 0.0
+      },
+      {
+        "num": "2",
+        "name": "Copy SPLIT-PLAN.md template",
+        "h_baseline": 0.0,
+        "h_ai": 0.0
+      },
+      {
+        "num": "3",
+        "name": "Copy TIME-LOG.md + AGENT-LOG.md templates",
+        "h_baseline": 0.0,
+        "h_ai": 0.0
+      },
+      {
+        "num": "4",
+        "name": "Copy DASHBOARD.html stub",
+        "h_baseline": 0.0,
+        "h_ai": 0.0
+      },
+      {
+        "num": "5",
+        "name": "Copy TODO.md template",
+        "h_baseline": 0.0,
+        "h_ai": 0.0
+      },
+      {
+        "num": "6",
+        "name": "Copy CLAUDE.md template",
+        "h_baseline": 0.0,
+        "h_ai": 0.0
+      },
+      {
+        "num": "7",
+        "name": "Scaffold docs/ skeleton",
+        "h_baseline": 0.0,
+        "h_ai": 0.0
+      },
+      {
+        "num": "8",
+        "name": "Scaffold project-level quality configs",
+        "h_baseline": 0.0,
+        "h_ai": 0.0
+      },
+      {
+        "num": "9",
+        "name": "Scaffold .claude/ skeleton",
+        "h_baseline": 0.0,
+        "h_ai": 0.0
+      },
+      {
+        "num": "10",
+        "name": "Copy methodology/ docs",
+        "h_baseline": 0.0,
+        "h_ai": 0.0
+      },
+      {
+        "num": "11",
+        "name": "Copy integrations/ docs",
+        "h_baseline": 0.0,
+        "h_ai": 0.0
+      },
+      {
+        "num": "12",
+        "name": "Copy tools/ scripts",
+        "h_baseline": 0.0,
+        "h_ai": 0.0
+      },
+      {
+        "num": "13",
+        "name": "Make .claude/hooks/*.sh executable",
+        "h_baseline": 0.0,
+        "h_ai": 0.0
+      },
+      {
+        "num": "14",
+        "name": "Stage kit assets to .kit/ for slash commands",
+        "h_baseline": 0.0,
+        "h_ai": 0.0
+      },
+      {
+        "num": "15",
+        "name": "Append Phase 0 row to SPLIT-PLAN §5 (progress log)",
+        "h_baseline": 0.0,
+        "h_ai": 0.0
+      },
+      {
+        "num": "16",
+        "name": "Final integrity check",
+        "h_baseline": 0.0,
+        "h_ai": 0.0
+      }
+    ],
+    "completed": "2026-06-14"
+  }
+};

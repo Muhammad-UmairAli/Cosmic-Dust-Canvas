@@ -1,0 +1,5 @@
+node_modules/
+sandboxes/*/node_modules/
+
+# Kit infrastructure — staged assets used by kit slash commands
+.kit/
