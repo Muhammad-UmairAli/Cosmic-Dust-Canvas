@@ -11,9 +11,6 @@ beforeEach(() => {
     beginPath: vi.fn(),
     arc: vi.fn(),
     fill: vi.fn(),
-    createRadialGradient: vi.fn().mockReturnValue({
-      addColorStop: vi.fn(),
-    }),
     shadowBlur: 0,
     shadowColor: '',
     globalAlpha: 1,

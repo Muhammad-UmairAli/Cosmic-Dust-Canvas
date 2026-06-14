@@ -6,7 +6,7 @@ import {
   type Particle,
 } from './particles'
 
-const SPRING_CLAMP = 60
+const SPRING_CLAMP = 120
 
 export interface ParticleLoopConfig {
   count: number
@@ -100,12 +100,7 @@ export function useParticleLoop(
         ctx.globalAlpha = p.opacity
         ctx.shadowBlur = cfg.glowIntensity
         ctx.shadowColor = p.color
-
-        const gradient = ctx.createRadialGradient(drawX, drawY, 0, drawX, drawY, p.size)
-        gradient.addColorStop(0, p.color)
-        gradient.addColorStop(1, 'transparent')
-
-        ctx.fillStyle = gradient
+        ctx.fillStyle = p.color
         ctx.beginPath()
         ctx.arc(drawX, drawY, p.size, 0, Math.PI * 2)
         ctx.fill()
@@ -162,8 +157,8 @@ function applyMouseInfluence(
   if (dist < config.mouseInfluenceRadius && dist > 0) {
     const force = (config.mouseInfluenceRadius - dist) / config.mouseInfluenceRadius
     const dir = config.mouseEffect === 'repel' ? 1 : -1
-    p.springOffsetX += (dx / dist) * force * 3 * dir
-    p.springOffsetY += (dy / dist) * force * 3 * dir
+    p.springOffsetX += (dx / dist) * force * 6 * dir
+    p.springOffsetY += (dy / dist) * force * 6 * dir
   }
 
   p.springOffsetX *= 0.92
