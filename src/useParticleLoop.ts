@@ -1,5 +1,10 @@
 import { useEffect, useRef } from 'react'
-import { spawnParticles, updateParticle, type Particle } from './particles'
+import {
+  spawnParticles,
+  updateParticle,
+  createParticle,
+  type Particle,
+} from './particles'
 
 const SPRING_CLAMP = 60
 
@@ -18,17 +23,20 @@ export function useParticleLoop(
   canvasRef: React.RefObject<HTMLCanvasElement>,
   config: ParticleLoopConfig,
 ) {
-  // Always-current config ref so the rAF closure never reads stale props
+  // Always-current config ref — updated every render, read every rAF frame
   const configRef = useRef<ParticleLoopConfig>(config)
   configRef.current = config
 
   const particlesRef = useRef<Particle[]>([])
   const mouseRef = useRef({ x: -9999, y: -9999 })
   const rafRef = useRef<number>(0)
-  // Stable handler refs so addEventListener/removeEventListener use the same function identity
+  const canvasSizeRef = useRef({ w: 0, h: 0 })
+
+  // Stable handler refs — same function identity across renders, no listener leak
   const onResizeRef = useRef<() => void>(() => undefined)
   const onMouseMoveRef = useRef<(e: MouseEvent) => void>(() => undefined)
 
+  // ── Main rAF loop (mounts once, reads config dynamically via ref) ──────────
   useEffect(() => {
     const canvas = canvasRef.current
     if (!canvas) return
@@ -38,14 +46,15 @@ export function useParticleLoop(
 
     const setSize = () => {
       const parent = canvas.parentElement
-      const w = parent ? parent.clientWidth : window.innerWidth
-      const h = parent ? parent.clientHeight : window.innerHeight
-      canvas.width = w
-      canvas.height = h
+      canvasSizeRef.current.w = parent ? parent.clientWidth : window.innerWidth
+      canvasSizeRef.current.h = parent ? parent.clientHeight : window.innerHeight
+      canvas.width = canvasSizeRef.current.w
+      canvas.height = canvasSizeRef.current.h
     }
 
     setSize()
-    const { count, colors, minSize, maxSize, speed } = configRef.current
+
+    const { count, colors, minSize, maxSize } = configRef.current
     particlesRef.current = spawnParticles(
       count,
       canvas.width,
@@ -53,23 +62,12 @@ export function useParticleLoop(
       colors,
       minSize,
       maxSize,
-      speed,
     )
-
-    // Cache gradients per color to avoid per-frame allocations
-    const gradientCache = new Map<string, CanvasGradient>()
-    const getGradient = (color: string, x: number, y: number, size: number) => {
-      const g = ctx.createRadialGradient(x, y, 0, x, y, size)
-      g.addColorStop(0, color)
-      g.addColorStop(1, 'transparent')
-      return g
-    }
 
     onResizeRef.current = () => {
       const prevW = canvas.width
       const prevH = canvas.height
       setSize()
-      gradientCache.clear()
       const scaleX = canvas.width / prevW
       const scaleY = canvas.height / prevH
       for (const p of particlesRef.current) {
@@ -91,7 +89,8 @@ export function useParticleLoop(
       ctx.clearRect(0, 0, canvas.width, canvas.height)
 
       for (const p of particlesRef.current) {
-        updateParticle(p, canvas.width, canvas.height)
+        // speed is applied per-frame so slider changes take effect immediately
+        updateParticle(p, canvas.width, canvas.height, cfg.speed)
         applyMouseInfluence(p, mouseRef.current, cfg)
 
         const drawX = p.x + p.springOffsetX
@@ -101,7 +100,12 @@ export function useParticleLoop(
         ctx.globalAlpha = p.opacity
         ctx.shadowBlur = cfg.glowIntensity
         ctx.shadowColor = p.color
-        ctx.fillStyle = getGradient(p.color, drawX, drawY, p.size)
+
+        const gradient = ctx.createRadialGradient(drawX, drawY, 0, drawX, drawY, p.size)
+        gradient.addColorStop(0, p.color)
+        gradient.addColorStop(1, 'transparent')
+
+        ctx.fillStyle = gradient
         ctx.beginPath()
         ctx.arc(drawX, drawY, p.size, 0, Math.PI * 2)
         ctx.fill()
@@ -119,6 +123,25 @@ export function useParticleLoop(
       window.removeEventListener('mousemove', onMouseMoveRef.current)
     }
   }, [canvasRef])
+
+  // ── Particle count management (add/remove when count prop changes) ─────────
+  useEffect(() => {
+    const { count, colors, minSize, maxSize } = configRef.current
+    const { w, h } = canvasSizeRef.current
+    if (w === 0 || h === 0) return // canvas not yet sized
+
+    const current = particlesRef.current
+    if (current.length === count) return
+
+    if (count > current.length) {
+      const extra = Array.from({ length: count - current.length }, () =>
+        createParticle(w, h, colors, minSize, maxSize),
+      )
+      particlesRef.current = [...current, ...extra]
+    } else {
+      particlesRef.current = current.slice(0, count)
+    }
+  }, [config.count])
 }
 
 function applyMouseInfluence(
@@ -146,7 +169,6 @@ function applyMouseInfluence(
   p.springOffsetX *= 0.92
   p.springOffsetY *= 0.92
 
-  // Clamp to prevent particles drifting too far from their natural position
   p.springOffsetX = Math.max(-SPRING_CLAMP, Math.min(SPRING_CLAMP, p.springOffsetX))
   p.springOffsetY = Math.max(-SPRING_CLAMP, Math.min(SPRING_CLAMP, p.springOffsetY))
 }
