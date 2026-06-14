@@ -96,17 +96,29 @@ export function useParticleLoop(
         const drawX = p.x + p.springOffsetX
         const drawY = p.y + p.springOffsetY
 
-        const haloR = p.size + cfg.glowIntensity
-        const glow = ctx.createRadialGradient(drawX, drawY, 0, drawX, drawY, haloR)
-        glow.addColorStop(0, p.color)
-        glow.addColorStop(1, 'transparent')
-
         ctx.save()
         ctx.globalAlpha = p.opacity
-        ctx.fillStyle = glow
+
+        // Glow halo — ring only (evenodd punches out the core area) so
+        // overlapping halos at high glowIntensity don't accumulate into screen fog.
+        if (cfg.glowIntensity > 0) {
+          const haloR = p.size + cfg.glowIntensity
+          const glow = ctx.createRadialGradient(drawX, drawY, p.size, drawX, drawY, haloR)
+          glow.addColorStop(0, p.color)
+          glow.addColorStop(1, 'transparent')
+          ctx.fillStyle = glow
+          ctx.beginPath()
+          ctx.arc(drawX, drawY, haloR, 0, Math.PI * 2) // outer circle
+          ctx.arc(drawX, drawY, p.size, 0, Math.PI * 2) // inner circle → evenodd hole
+          ctx.fill('evenodd')
+        }
+
+        // Solid particle core
+        ctx.fillStyle = p.color
         ctx.beginPath()
-        ctx.arc(drawX, drawY, haloR, 0, Math.PI * 2)
+        ctx.arc(drawX, drawY, p.size, 0, Math.PI * 2)
         ctx.fill()
+
         ctx.restore()
       }
 
