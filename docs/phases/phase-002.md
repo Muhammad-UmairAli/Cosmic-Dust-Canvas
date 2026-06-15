@@ -1,7 +1,7 @@
 # Phase 2 — v0.2-features-and-polish
 
 **Date opened:** 2026-06-15
-**Status:** IN FLIGHT
+**Status:** CLOSED (2026-06-16)
 
 ## Scope
 
@@ -54,5 +54,50 @@ DPR-scaled — see SPLIT-PLAN §6 (backlog) for the retina pass.
 
 ## Closure log
 
-<!-- Filled in when the phase closes. Date closed, Issue/PR numbers,
-what shipped, files NOT touched, sanity checks, what this unblocks. -->
+**Date closed:** 2026-06-16
+**Shipped:** `cosmic-dust-canvas@0.2.1` on npm (with provenance), playground live at
+https://muhammad-umairali.github.io/Cosmic-Dust-Canvas/
+
+### Tasks (all merged to `develop`, each via its own PR + code-review gate)
+
+| Task                   | Issue/PR  | Summary                                                                                                          |
+| ---------------------- | --------- | ---------------------------------------------------------------------------------------------------------------- |
+| 001 sprite cache       | #7 / #8   | Bounded-LRU offscreen-canvas sprite cache; per-frame draw = Map lookup + `drawImage`, zero gradient allocation   |
+| 002 custom shapes      | #9 / #10  | `shape` union (circle/star/square/triangle) + `renderParticle` escape hatch; `Particle`/`ParticleShape` exported |
+| 003 twinkle            | #11 / #12 | `twinkle` opacity pulse, out of sync, exact no-op at 0                                                           |
+| 004 colour breathing   | #13 / #14 | `colorCycle` palette cycling, shrink-safe, reuses cached sprites                                                 |
+| 005 touch              | #15 / #16 | `touch` drag → shared `mouseRef` influence; leak-free listeners                                                  |
+| 006 playground + Pages | #17 / #18 | Interactive demo with controls for every prop + Pages deploy workflow                                            |
+| 007 CI publish         | #19 / #20 | Tag-triggered npm publish w/ provenance; security-audited (HIGH resolved via env gate)                           |
+| 008 release prep       | #21 / #22 | README/JSDoc, version bump                                                                                       |
+
+### Release + post-release fixes
+
+- **v0.2.0** published from a pre-fix commit (publish approved before the dpr fix
+  merged) → blurry on hi-DPI. npm forbids republishing, so superseded by v0.2.1.
+- **Provenance fix** (#24): added `repository`/`homepage`/`bugs` to package.json
+  (npm `--provenance` requires `repository.url`).
+- **hi-DPI blur fix** (#25 / #26 → #27): the SPLIT-PLAN §6 (backlog) "DPR-aware main
+  canvas" item, picked up — backing store now `cssW/H × devicePixelRatio` +
+  `ctx.setTransform(dpr)`, so the dpr-rendered sprites blit 1:1 (crisp cores).
+- **v0.2.1** (#28): version bump + `glowIntensity` now defaults to `0` (glow opt-in).
+  Back-merged `main` → `develop` (#29) to resync.
+
+### Sanity checks
+
+- 59 Vitest tests pass; `tsc` + `eslint` + `actionlint` clean.
+- Build **9.25 KB gzip (ESM)** — within the ≤ 12 KB budget (NFR-2).
+- `npm view cosmic-dust-canvas@0.2.1 gitHead` = `50deae2` (the crisp build).
+- `develop` content-identical to `main` after the back-merge.
+
+### Carried to SPLIT-PLAN §6 (backlog)
+
+- SHA-pin GitHub Actions repo-wide + Dependabot (Task 007 security MEDIUM-2, risk accepted).
+
+### Follow-up for the maintainer
+
+- `npm deprecate cosmic-dust-canvas@0.2.0 "blurry on hi-DPI displays; upgrade to 0.2.1+"` (needs npm login).
+
+### Files NOT touched
+
+`docs/methodology/`, `.claude/settings.json`, the test framework config (Vitest/ESLint/Prettier setup).
