@@ -1,6 +1,6 @@
 {
   "name": "cosmic-dust-canvas",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "A reusable React component that renders hundreds of softly glowing particles drifting across the screen and reacting to the user's mouse.",
   "keywords": [
     "react",
@@ -12,6 +12,12 @@
   ],
   "author": "Muhammad Umair Ali",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Muhammad-UmairAli/Cosmic-Dust-Canvas.git"
+  },
+  "homepage": "https://muhammad-umairali.github.io/Cosmic-Dust-Canvas/",
+  "bugs": "https://github.com/Muhammad-UmairAli/Cosmic-Dust-Canvas/issues",
   "type": "module",
   "main": "dist/cosmic-dust-canvas.cjs",
   "module": "dist/cosmic-dust-canvas.js",

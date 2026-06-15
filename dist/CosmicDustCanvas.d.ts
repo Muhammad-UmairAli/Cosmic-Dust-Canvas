@@ -12,7 +12,7 @@ export interface CosmicDustCanvasProps {
     maxSize?: number;
     /** Drift speed multiplier. Default: 0.4 */
     speed?: number;
-    /** Glow halo spread in px beyond the particle (radial-gradient ring). 0 = no glow. Default: 15 */
+    /** Glow halo spread in px beyond the particle (radial-gradient ring). 0 = no glow (default). */
     glowIntensity?: number;
     /** Radius in px around the cursor within which particles are influenced. Default: 120 */
     mouseInfluenceRadius?: number;

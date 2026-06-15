@@ -884,7 +884,7 @@ function Vr({
   minSize: o = 1,
   maxSize: i = 3,
   speed: s = 0.4,
-  glowIntensity: l = 15,
+  glowIntensity: l = 0,
   mouseInfluenceRadius: u = 120,
   mouseEffect: f = "repel",
   touch: m = !0,
