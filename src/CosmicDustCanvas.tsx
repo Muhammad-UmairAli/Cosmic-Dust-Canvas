@@ -21,6 +21,14 @@ export interface CosmicDustCanvasProps {
   /** How particles react to the cursor. Default: 'repel' */
   mouseEffect?: 'repel' | 'attract' | 'none'
   /**
+   * Opacity-pulse strength for a shimmering effect. Useful range [0, 1]:
+   * 0 = off (default), 1 = each particle softly pulses between full and dim,
+   * out of sync with the others. Values are clamp-safe but > 1 just floors
+   * opacity at 0 for part of the cycle. Modulates draw-time alpha only — the
+   * sprite cache is unaffected.
+   */
+  twinkle?: number
+  /**
    * Built-in particle shape. Default: 'circle'. Non-circle shapes share the
    * circular bounding-radius glow halo (visible in concave regions, e.g.
    * between star spikes).
@@ -69,6 +77,7 @@ function CosmicDustCanvasInner(
     mouseInfluenceRadius: props.mouseInfluenceRadius,
     mouseEffect: props.mouseEffect,
     shape: props.shape,
+    twinkle: props.twinkle,
     renderParticle: props.renderParticle,
   })
 
@@ -91,6 +100,7 @@ export function CosmicDustCanvas({
   mouseInfluenceRadius = 120,
   mouseEffect = 'repel',
   shape = 'circle',
+  twinkle = 0,
   renderParticle,
   className,
   style,
@@ -110,6 +120,7 @@ export function CosmicDustCanvas({
       mouseInfluenceRadius={mouseInfluenceRadius}
       mouseEffect={mouseEffect}
       shape={shape}
+      twinkle={twinkle}
       renderParticle={renderParticle}
       className={className}
       style={style}

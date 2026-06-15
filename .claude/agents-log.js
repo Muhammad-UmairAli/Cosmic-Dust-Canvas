@@ -172,5 +172,27 @@ window.AGENTS_LOG_DATA = [
     "notes": "Re-review Task 001 blocking fixes",
     "end_time": "2026-06-14T23:57:05Z",
     "duration_ms": 38867
+  },
+  {
+    "datetime": "2026-06-15T00:21:52Z",
+    "phase": "2",
+    "step": "4",
+    "framework": "VoltAgent",
+    "agent_name": "voltagent-qa-sec:code-reviewer",
+    "parallel": "n",
+    "notes": "Code review Task 002 custom shapes",
+    "end_time": "2026-06-15T00:23:18Z",
+    "duration_ms": 86242
+  },
+  {
+    "datetime": "2026-06-15T00:30:05Z",
+    "phase": "2",
+    "step": "5",
+    "framework": "VoltAgent",
+    "agent_name": "voltagent-qa-sec:code-reviewer",
+    "parallel": "n",
+    "notes": "Code review Task 003 twinkle",
+    "end_time": "2026-06-15T00:31:45Z",
+    "duration_ms": 100478
   }
 ];

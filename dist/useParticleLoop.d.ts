@@ -11,6 +11,8 @@ export interface ParticleLoopConfig {
     mouseInfluenceRadius: number;
     mouseEffect: 'repel' | 'attract' | 'none';
     shape: ParticleShape;
+    /** Opacity-pulse strength, 0 = off. Modulates draw-time alpha only. */
+    twinkle: number;
     /**
      * Escape hatch: when set, fully controls per-particle drawing and bypasses
      * the sprite cache. `ctx` is translated to the particle position (draw at the

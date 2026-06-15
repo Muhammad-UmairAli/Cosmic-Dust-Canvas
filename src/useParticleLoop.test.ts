@@ -10,6 +10,8 @@ const makeParticle = (over: Partial<Particle> = {}): Particle => ({
   baseVy: 0,
   size: 3,
   opacity: 0.7,
+  baseOpacity: 0.7,
+  twinklePhase: 0,
   color: '#fff',
   springOffsetX: 0,
   springOffsetY: 0,
@@ -26,6 +28,7 @@ const makeCfg = (over: Partial<ParticleLoopConfig> = {}): ParticleLoopConfig => 
   mouseInfluenceRadius: 120,
   mouseEffect: 'none',
   shape: 'circle',
+  twinkle: 0,
   ...over,
 })
 

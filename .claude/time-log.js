@@ -262,5 +262,13 @@ window.TIME_LOG_DATA = [
     "hours": 0.1092180163888889,
     "who": "claude",
     "notes": "Task 002 — custom shapes: new src/shapes.ts (circle/star/square/triangle path builders + tracePath dispatch); drawGlowSprite now fills the chosen shape (circle byte-identical to v0.1.1); shape + renderParticle added to props/config; renderParticle escape hatch bypasses sprite cache (extracted+exported drawParticle for testability); Particle+ParticleShape exported from index.ts. 41 tests pass (shapes + drawParticle + star-threading), tsc+eslint clean, build 8.71KB gzip. Code-review APPROVED, no blocking; advisory docs/tests folded in."
+  },
+  {
+    "datetime": "2026-06-15T00:32:39Z",
+    "phase": "2",
+    "step": "5",
+    "hours": 0.08181508583333333,
+    "who": "claude",
+    "notes": "Task 003 — twinkle/opacity pulse: Particle gains baseOpacity+twinklePhase (random phase → out-of-sync); applyTwinkle modulates p.opacity via spec formula, clamped [0,1], phase wraps at 2π; twinkle=0 is exact no-op (no phase drift). twinkle prop default 0; sprite cache untouched. 48 tests pass, tsc+eslint clean, build 8.83KB gzip. Code-review: no blocking; advisory phase-modulo + out-of-sync test + doc folded in."
   }
 ];
