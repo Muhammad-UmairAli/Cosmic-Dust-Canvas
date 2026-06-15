@@ -5,6 +5,7 @@ import {
   createParticle,
   type Particle,
 } from './particles'
+import { getGlowSprite, clearSpriteCache } from './sprites'
 
 const SPRING_CLAMP = 120
 
@@ -44,6 +45,11 @@ export function useParticleLoop(
     const ctx = canvas.getContext('2d')
     if (!ctx) return
 
+    // Backing resolution for pre-rendered sprites — keeps them crisp on retina.
+    // Re-read on resize: browser zoom / moving to another monitor changes it,
+    // and stale sprites would render blurry until remount.
+    let dpr = window.devicePixelRatio || 1
+
     const setSize = () => {
       const parent = canvas.parentElement
       canvasSizeRef.current.w = parent ? parent.clientWidth : window.innerWidth
@@ -74,6 +80,11 @@ export function useParticleLoop(
         p.x *= scaleX
         p.y *= scaleY
       }
+      const nextDpr = window.devicePixelRatio || 1
+      if (nextDpr !== dpr) {
+        dpr = nextDpr
+        clearSpriteCache() // rebuild sprites at the new device resolution
+      }
     }
 
     onMouseMoveRef.current = (e: MouseEvent) => {
@@ -96,32 +107,15 @@ export function useParticleLoop(
         const drawX = p.x + p.springOffsetX
         const drawY = p.y + p.springOffsetY
 
-        ctx.save()
+        // Pre-rendered ring-glow halo + core, cached per (color, size, glow, dpr).
+        // No gradient/arc allocation in this hot path — only a Map lookup + blit.
+        const sprite = getGlowSprite(p.color, p.size, cfg.glowIntensity, dpr)
+        const half = p.size + cfg.glowIntensity
         ctx.globalAlpha = p.opacity
-
-        // Glow halo — ring only (evenodd punches out the core area) so
-        // overlapping halos at high glowIntensity don't accumulate into screen fog.
-        if (cfg.glowIntensity > 0) {
-          const haloR = p.size + cfg.glowIntensity
-          const glow = ctx.createRadialGradient(drawX, drawY, p.size, drawX, drawY, haloR)
-          glow.addColorStop(0, p.color)
-          glow.addColorStop(1, 'transparent')
-          ctx.fillStyle = glow
-          ctx.beginPath()
-          ctx.arc(drawX, drawY, haloR, 0, Math.PI * 2) // outer circle
-          ctx.arc(drawX, drawY, p.size, 0, Math.PI * 2) // inner circle → evenodd hole
-          ctx.fill('evenodd')
-        }
-
-        // Solid particle core
-        ctx.fillStyle = p.color
-        ctx.beginPath()
-        ctx.arc(drawX, drawY, p.size, 0, Math.PI * 2)
-        ctx.fill()
-
-        ctx.restore()
+        ctx.drawImage(sprite, drawX - half, drawY - half, half * 2, half * 2)
       }
 
+      ctx.globalAlpha = 1
       rafRef.current = requestAnimationFrame(draw)
     }
 
@@ -152,6 +146,13 @@ export function useParticleLoop(
       particlesRef.current = current.slice(0, count)
     }
   }, [config.count])
+
+  // ── Invalidate cached sprites when their visual inputs change ──────────────
+  // colors is joined so a new-but-equal array reference doesn't churn the cache.
+  const colorsKey = config.colors.join('|')
+  useEffect(() => {
+    clearSpriteCache()
+  }, [colorsKey, config.minSize, config.maxSize, config.glowIntensity])
 }
 
 function applyMouseInfluence(

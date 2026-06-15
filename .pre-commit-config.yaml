@@ -35,10 +35,19 @@ repos:
         args: [--fix=lf]
 
   # ── Markdown / YAML / JSON formatting ────────────────────────────────────
-  - repo: https://github.com/pre-commit/mirrors-prettier
-    rev: v4.0.0-alpha.8
+  # mirrors-prettier is deprecated; its v4 alpha errors with "No files matching
+  # the given patterns were found" whenever its passed file list resolves
+  # entirely through .prettierignore (e.g. a commit touching only ignored md +
+  # one docs/phases doc). Use a self-contained local hook on a pinned stable
+  # prettier instead. It still reads .prettierrc + .prettierignore from the repo
+  # root; --ignore-unknown skips unparseable types rather than failing the run.
+  - repo: local
     hooks:
       - id: prettier
+        name: prettier
+        entry: prettier --write --ignore-unknown
+        language: node
+        additional_dependencies: ['prettier@3.8.4']
         types_or: [markdown, yaml, json]
         # Workflow YAMLs use GitHub-Actions-flavored syntax; let actionlint
         # govern those instead of prettier.

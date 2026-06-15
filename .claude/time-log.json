@@ -214,5 +214,45 @@
     "hours": 0.25,
     "who": "claude",
     "notes": "Bug fix: replaced ctx.shadowBlur with manual radial-gradient glow; doubled spring force + raised clamp for visible mouseInfluenceRadius; all 16 tests pass"
+  },
+  {
+    "datetime": "2026-06-14T13:26:37Z",
+    "phase": "1",
+    "step": "10",
+    "hours": 0.3,
+    "who": "claude",
+    "notes": "npm publish v0.1.0: removed @react-spring/web peerDep, rebuilt dist, Git Flow release branch, tag v0.1.0, back-merge to develop, GitHub Release created"
+  },
+  {
+    "datetime": "2026-06-14T23:22:16Z",
+    "phase": "2",
+    "step": "0",
+    "hours": 0.05,
+    "who": "claude",
+    "notes": "Opened Phase 2 — v0.2-features-and-polish"
+  },
+  {
+    "datetime": "2026-06-14T23:27:30Z",
+    "phase": "2",
+    "step": "1",
+    "hours": 0.4,
+    "who": "claude",
+    "notes": "Hotfix v0.1.1: ring-only glow (evenodd), two-pass draw, version bump, Git Flow hotfix branch, tag, npm publish, back-merge"
+  },
+  {
+    "datetime": "2026-06-14T23:35:31Z",
+    "phase": "2",
+    "step": "2",
+    "hours": 0.6,
+    "who": "claude",
+    "notes": "Phase 2 decomposition: gathered requirements, VoltAgent stack proposal, wrote PRD + EPIC + 8 task files for v0.2.0 (features, docs, CI, perf)"
+  },
+  {
+    "datetime": "2026-06-15T00:00:12Z",
+    "phase": "2",
+    "step": "3",
+    "hours": 0.255348315,
+    "who": "claude",
+    "notes": "Task 001 — sprite pre-render + batched draw loop: new src/sprites.ts (bounded-LRU sprite cache, drawGlowSprite ring-glow halo+core, getGlowSprite keyed by shape·color·size·glow·dpr, clearSpriteCache); refactored useParticleLoop.ts hot path to Map-lookup + drawImage (zero per-frame gradient alloc), dpr re-read + cache-invalidate on resize/zoom; 14 sprite tests added (30 total pass), tsc+eslint clean, build 8.35KB gzip. Code-review gate passed (2 rounds: B1 stale-dpr + B3 cache-bound fixed; minSize/maxSize clear kept per spec)."
   }
 ]

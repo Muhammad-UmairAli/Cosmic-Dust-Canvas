@@ -1,4 +1,4 @@
-[
+window.AGENTS_LOG_DATA = [
   {
     "datetime": "2026-06-14T12:12:45Z",
     "phase": "unknown",
@@ -173,4 +173,4 @@
     "end_time": "2026-06-14T23:57:05Z",
     "duration_ms": 38867
   }
-]
+];
