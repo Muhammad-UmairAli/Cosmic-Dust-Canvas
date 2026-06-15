@@ -216,5 +216,16 @@ window.AGENTS_LOG_DATA = [
     "notes": "Code review Task 005 touch support",
     "end_time": "2026-06-15T14:34:40Z",
     "duration_ms": 69156
+  },
+  {
+    "datetime": "2026-06-15T14:50:02Z",
+    "phase": "2",
+    "step": "8",
+    "framework": "VoltAgent",
+    "agent_name": "voltagent-qa-sec:code-reviewer",
+    "parallel": "n",
+    "notes": "Code review Task 006 playground + Pages",
+    "end_time": "2026-06-15T14:53:13Z",
+    "duration_ms": 191206
   }
 ];

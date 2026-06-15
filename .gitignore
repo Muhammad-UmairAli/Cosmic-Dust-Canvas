@@ -6,5 +6,6 @@ sandboxes/*/node_modules/
 
 # Ephemeral local state — not tracked
 demo/.vite/
+demo/dist/
 .claude/agent-in-flight.json
 .claude/.integrations-wizard-run
