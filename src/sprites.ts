@@ -8,8 +8,9 @@
  * frame. The visual result is identical to v0.1.1; only the per-frame cost drops.
  */
 
-/** Particle shape. Only 'circle' exists today; the union grows in Task 002. */
-export type ParticleShape = 'circle'
+import { tracePath, type ParticleShape } from './shapes'
+
+export type { ParticleShape }
 
 /**
  * Hard ceiling on cached sprites. A normal scene needs one sprite per distinct
@@ -59,22 +60,25 @@ export function spriteKey(
 }
 
 /**
- * Renders the v0.1.1 particle appearance into `ctx`, centred at
+ * Renders the particle appearance into `ctx`, centred at
  * (size + glowIntensity, size + glowIntensity) in CSS pixels:
- *   • a ring-only glow halo — evenodd punches out the core area so overlapping
- *     halos at high glowIntensity don't accumulate into screen fog, and
- *   • the solid particle core.
- * At glowIntensity === 0 only the solid core is drawn.
+ *   • a ring-only glow halo — evenodd punches out the bounding-radius circle so
+ *     overlapping halos at high glowIntensity don't accumulate into screen fog,
+ *     and rings every shape consistently at its bounding radius, and
+ *   • the solid particle core in the chosen `shape`.
+ * At glowIntensity === 0 only the solid core is drawn. `shape='circle'` is
+ * identical to v0.1.1.
  */
 export function drawGlowSprite(
   ctx: CanvasRenderingContext2D,
   color: string,
   size: number,
   glowIntensity: number,
+  shape: ParticleShape = 'circle',
 ): void {
   const center = size + glowIntensity // sprite centre, in CSS px
 
-  // Glow halo — ring only (evenodd hole over the core). Matches v0.1.1.
+  // Glow halo — ring only (evenodd hole over the bounding radius). Matches v0.1.1.
   if (glowIntensity > 0) {
     const haloR = size + glowIntensity
     const glow = ctx.createRadialGradient(center, center, size, center, center, haloR)
@@ -87,10 +91,10 @@ export function drawGlowSprite(
     ctx.fill('evenodd')
   }
 
-  // Solid particle core
+  // Solid particle core in the chosen shape
   ctx.fillStyle = color
   ctx.beginPath()
-  ctx.arc(center, center, size, 0, Math.PI * 2)
+  tracePath(ctx, shape, center, center, size)
   ctx.fill()
 }
 
@@ -115,7 +119,7 @@ export function getGlowSprite(
     const ctx = canvas.getContext('2d')
     if (ctx) {
       ctx.scale(dpr, dpr) // draw in CSS px; back at device resolution
-      drawGlowSprite(ctx, color, size, glowIntensity)
+      drawGlowSprite(ctx, color, size, glowIntensity, shape)
     }
     return canvas
   })
