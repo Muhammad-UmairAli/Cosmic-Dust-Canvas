@@ -1,6 +1,6 @@
 {
   "name": "cosmic-dust-canvas",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "A reusable React component that renders hundreds of softly glowing particles drifting across the screen and reacting to the user's mouse.",
   "keywords": [
     "react",

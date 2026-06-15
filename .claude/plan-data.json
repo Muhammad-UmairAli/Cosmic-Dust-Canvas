@@ -229,6 +229,12 @@
         "name": "Task 007 — CI auto-publish on tag: new .github/workflows/publish.yml (v* tag trigger; guard job verifies tag is on main + version unpublished; publish job runs ci/test/build then npm publish --provenance --access public, id-token:write for OIDC). Security audit R=true: HIGH-1 (any tag-pusher could publish) resolved via protected npm-publish Environment + required reviewers (NPM_TOKEN as env secret); MEDIUM-1 (log injection) fixed; MEDIUM-2 (SHA-pin) deferred to backlog w/ risk acceptance. actionlint clean, 58 tests pass. Maintainer must create the npm-publish env w/ reviewers + add NPM_TOKEN.",
         "h_baseline": 1.5,
         "h_ai": 1.5
+      },
+      {
+        "num": "10",
+        "name": "Task 008 — release prep v0.2.0: README playground link + 'What's new in v0.2.0' section + star/twinkle/colorCycle example (props table already done in #16); bumped package.json 0.1.1→0.2.0; verified ≤12KB gzip budget (9.21KB ESM); confirmed JSDoc on all 15 props + fixed stale ctx.shadowBlur glowIntensity doc (rebuilt dist .d.ts). 58 tests pass, lint clean. Tag/publish is the separate user-gated release step.",
+        "h_baseline": 1.0,
+        "h_ai": 1.0
       }
     ]
   }
