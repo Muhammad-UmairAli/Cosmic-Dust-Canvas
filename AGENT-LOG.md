@@ -20,3 +20,9 @@ Columns: Date (UTC) | Phase | Step | Framework | AgentName | Parallel | Notes
 | 2026-06-14T12:30:08Z | 1       | 6       | Claude    | general-purpose                       | n        | Verify: negative size + rAF stale cancellation + mousemove leak                  |
 | 2026-06-14T12:30:25Z | 1       | 6       | Claude    | general-purpose                       | n        | Verify: stale closure on prop changes + shadowBlur bleed + untyped params        |
 | 2026-06-14T12:30:38Z | 1       | 6       | Claude    | general-purpose                       | n        | Verify: radialGradient per-frame GC + unbounded spring offset + resize staleness |
+
+| Date | Phase | Step | Framework | AgentName | Parallel | Notes |
+| ---- | ----- | ---- | --------- | --------- | -------- | ----- |
+| 2026-06-14T23:29:38Z | unknown | unknown | Claude | general-purpose | n | Propose v0.2 tooling stacks |
+| 2026-06-14T23:50:00Z | 2 | 3 | VoltAgent | voltagent-qa-sec:code-reviewer | n | Code review Task 001 sprite cache |
+| 2026-06-14T23:56:27Z | 2 | 3 | VoltAgent | voltagent-qa-sec:code-reviewer | n | Re-review Task 001 blocking fixes |

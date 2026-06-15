@@ -157,8 +157,43 @@ window.PLAN_DATA = {
         "name": "Bug fix: replaced ctx.shadowBlur with manual radial-gradient glow; doubled spring force + raised clamp for visible mouseInfluenceRadius; all 16 tests pass",
         "h_baseline": 0.25,
         "h_ai": 0.25
+      },
+      {
+        "num": "10",
+        "name": "npm publish v0.1.0: removed @react-spring/web peerDep, rebuilt dist, Git Flow release branch, tag v0.1.0, back-merge to develop, GitHub Release created",
+        "h_baseline": 0.3,
+        "h_ai": 0.3
       }
     ],
     "completed": "2026-06-14"
+  },
+  "2": {
+    "label": "Phase 2",
+    "steps": [
+      {
+        "num": "0",
+        "name": "Opened Phase 2 — v0.2-features-and-polish",
+        "h_baseline": 0.05,
+        "h_ai": 0.05
+      },
+      {
+        "num": "1",
+        "name": "Hotfix v0.1.1: ring-only glow (evenodd), two-pass draw, version bump, Git Flow hotfix branch, tag, npm publish, back-merge",
+        "h_baseline": 0.4,
+        "h_ai": 0.4
+      },
+      {
+        "num": "2",
+        "name": "Phase 2 decomposition: gathered requirements, VoltAgent stack proposal, wrote PRD + EPIC + 8 task files for v0.2.0 (features, docs, CI, perf)",
+        "h_baseline": 0.6,
+        "h_ai": 0.6
+      },
+      {
+        "num": "3",
+        "name": "Task 001 — sprite pre-render + batched draw loop: new src/sprites.ts (bounded-LRU sprite cache, drawGlowSprite ring-glow halo+core, getGlowSprite keyed by shape·color·size·glow·dpr, clearSpriteCache); refactored useParticleLoop.ts hot path to Map-lookup + drawImage (zero per-frame gradient alloc), dpr re-read + cache-invalidate on resize/zoom; 14 sprite tests added (30 total pass), tsc+eslint clean, build 8.35KB gzip. Code-review gate passed (2 rounds: B1 stale-dpr + B3 cache-bound fixed; minSize/maxSize clear kept per spec).",
+        "h_baseline": 2.5,
+        "h_ai": 2.5
+      }
+    ]
   }
 };
