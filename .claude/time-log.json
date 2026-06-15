@@ -318,5 +318,13 @@
     "hours": 0.10125506694444444,
     "who": "claude",
     "notes": "DPR-aware main canvas (retina blur fix): setSize backs canvas at clientW/H × devicePixelRatio + ctx.setTransform(dpr) so drawing stays in CSS coords; clearRect/updateParticle/spawn now use CSS dims; resize re-reads dpr before setSize (also fixes a latent stale-dpr resize bug). Sprites now blit 1:1 into the device-res backing → crisp cores, no browser upscale. Removed the DPR backlog item from SPLIT-PLAN §6. +1 regression test (canvas.width=cssW×dpr, setTransform(dpr) at dpr=2); 59 tests pass, lint clean, build 9.26KB gzip. Code-review: no blocking."
+  },
+  {
+    "datetime": "2026-06-15T22:39:00Z",
+    "phase": "2",
+    "step": "12",
+    "hours": 8.118333333333333e-06,
+    "who": "claude",
+    "notes": "Phase 2 release + close-out: cut release/0.2.0→main, tagged & published v0.2.0 (provenance fix #24 for repository.url); diagnosed+fixed hi-DPI blur (#26/#27, the deferred §6 retina item); v0.2.0 shipped blurry (run approved pre-fix) so superseded by v0.2.1 (#28) which also defaults glowIntensity→0; back-merged main→develop (#29); closed Phase 2 (closure log, SPLIT-PLAN §5 row, plan-data completed, render-check); self-healed close-phase.py python→sys.executable bug. cosmic-dust-canvas@0.2.1 live on npm + Pages playground."
   }
 ]

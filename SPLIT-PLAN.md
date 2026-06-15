@@ -61,7 +61,7 @@ See [`docs/architecture-design-decisions.md`](docs/architecture-design-decisions
 ---
 
 | 2026-06-14 | Phase 1 — react-cosmic-dust-component | PR #1 merged (feature/react-cosmic-dust-component → develop). Shipped cosmic-dust-canvas npm package: Canvas+React+TypeScript particle engine, mouse spring physics (repel/attract/none), manual radial-gradient glow scaling with glowIntensity (0–40), 16 passing Vitest tests, Vite ESM+CJS build at 7.83 KB gzip. Post-merge bug fixes: ctx.shadowBlur replaced with radial-gradient halo (glow now visually responds to slider); spring force doubled + clamp raised (mouseInfluenceRadius clearly perceptible). Files NOT touched: demo/, .github/, docs/methodology/. Unblocks: npm publish to registry, Phase 2 feature work. | (closed) |
-| 2026-06-15 | Phase 2 — v0.2-features-and-polish | IN FLIGHT | (will be filled in at close) |
+| 2026-06-16 | Phase 2 — v0.2-features-and-polish | Shipped **cosmic-dust-canvas@0.2.1** (npm, with provenance) + live GitHub Pages playground. 8 tasks merged (PRs #8/#10/#12/#14/#16/#18/#20/#22): sprite cache, custom shapes + renderParticle, twinkle, colour breathing, touch, playground+Pages, CI auto-publish (security-audited), release prep. Post-release: provenance fix (#24), hi-DPI device-resolution blur fix (#26/#27, the deferred §6 retina item), glowIntensity default→0 (#28), back-merge (#29). 59 tests, 9.25 KB gzip. Full detail: `docs/phases/phase-002.md` Closure log. Files NOT touched: docs/methodology/, .claude/settings.json. | (closed) |
 ## §6 — Backlog
 
 <!--
