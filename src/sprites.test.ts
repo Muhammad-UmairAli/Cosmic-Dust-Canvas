@@ -17,6 +17,10 @@ function makeCtxMock() {
     beginPath: vi.fn(),
     arc: vi.fn(),
     fill: vi.fn(),
+    rect: vi.fn(),
+    moveTo: vi.fn(),
+    lineTo: vi.fn(),
+    closePath: vi.fn(),
     createRadialGradient: vi.fn().mockReturnValue({ addColorStop: vi.fn() }),
     fillStyle: '',
   }
@@ -118,6 +122,12 @@ describe('getGlowSprite', () => {
     getGlowSprite('#fff', 2, 10, 1)
     expect(ctxMock.createRadialGradient).toHaveBeenCalledTimes(1)
     expect(ctxMock.arc).toHaveBeenCalledTimes(3) // outer + hole + core
+  })
+
+  it('threads the shape through to tracePath (star core)', () => {
+    getGlowSprite('#fff', 4, 10, 1, 'star')
+    expect(ctxMock.lineTo).toHaveBeenCalledTimes(9) // star core via tracePath
+    expect(ctxMock.arc).toHaveBeenCalledTimes(2) // halo outer + hole only
   })
 })
 

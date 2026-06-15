@@ -254,5 +254,13 @@
     "hours": 0.255348315,
     "who": "claude",
     "notes": "Task 001 — sprite pre-render + batched draw loop: new src/sprites.ts (bounded-LRU sprite cache, drawGlowSprite ring-glow halo+core, getGlowSprite keyed by shape·color·size·glow·dpr, clearSpriteCache); refactored useParticleLoop.ts hot path to Map-lookup + drawImage (zero per-frame gradient alloc), dpr re-read + cache-invalidate on resize/zoom; 14 sprite tests added (30 total pass), tsc+eslint clean, build 8.35KB gzip. Code-review gate passed (2 rounds: B1 stale-dpr + B3 cache-bound fixed; minSize/maxSize clear kept per spec)."
+  },
+  {
+    "datetime": "2026-06-15T00:24:26Z",
+    "phase": "2",
+    "step": "4",
+    "hours": 0.1092180163888889,
+    "who": "claude",
+    "notes": "Task 002 — custom shapes: new src/shapes.ts (circle/star/square/triangle path builders + tracePath dispatch); drawGlowSprite now fills the chosen shape (circle byte-identical to v0.1.1); shape + renderParticle added to props/config; renderParticle escape hatch bypasses sprite cache (extracted+exported drawParticle for testability); Particle+ParticleShape exported from index.ts. 41 tests pass (shapes + drawParticle + star-threading), tsc+eslint clean, build 8.71KB gzip. Code-review APPROVED, no blocking; advisory docs/tests folded in."
   }
 ]

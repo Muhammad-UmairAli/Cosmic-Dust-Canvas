@@ -6,6 +6,7 @@ import {
   type Particle,
 } from './particles'
 import { getGlowSprite, clearSpriteCache } from './sprites'
+import type { ParticleShape } from './shapes'
 
 const SPRING_CLAMP = 120
 
@@ -18,6 +19,46 @@ export interface ParticleLoopConfig {
   glowIntensity: number
   mouseInfluenceRadius: number
   mouseEffect: 'repel' | 'attract' | 'none'
+  shape: ParticleShape
+  /**
+   * Escape hatch: when set, fully controls per-particle drawing and bypasses
+   * the sprite cache. `ctx` is translated to the particle position (draw at the
+   * origin) with globalAlpha pre-set to the particle's opacity. Overrides `shape`.
+   * `p` is the live simulation particle — read its fields (size, color, opacity,
+   * springOffsetX/Y) but do not mutate it, or you'll corrupt the motion.
+   */
+  renderParticle?: (ctx: CanvasRenderingContext2D, p: Particle) => void
+}
+
+/**
+ * Draws one particle. If `renderParticle` is set it takes precedence (ctx
+ * translated to the particle, alpha pre-applied) and the sprite path is skipped;
+ * otherwise the cached glow sprite for the particle's shape is blitted.
+ */
+export function drawParticle(
+  ctx: CanvasRenderingContext2D,
+  p: Particle,
+  cfg: ParticleLoopConfig,
+  dpr: number,
+): void {
+  const drawX = p.x + p.springOffsetX
+  const drawY = p.y + p.springOffsetY
+
+  if (cfg.renderParticle) {
+    ctx.save()
+    ctx.globalAlpha = p.opacity
+    ctx.translate(drawX, drawY)
+    cfg.renderParticle(ctx, p)
+    ctx.restore()
+    return
+  }
+
+  // Pre-rendered halo + shaped core, cached per (shape, color, size, glow, dpr).
+  // No gradient/arc allocation in this hot path — only a Map lookup + blit.
+  const sprite = getGlowSprite(p.color, p.size, cfg.glowIntensity, dpr, cfg.shape)
+  const half = p.size + cfg.glowIntensity
+  ctx.globalAlpha = p.opacity
+  ctx.drawImage(sprite, drawX - half, drawY - half, half * 2, half * 2)
 }
 
 export function useParticleLoop(
@@ -103,16 +144,7 @@ export function useParticleLoop(
         // speed is applied per-frame so slider changes take effect immediately
         updateParticle(p, canvas.width, canvas.height, cfg.speed)
         applyMouseInfluence(p, mouseRef.current, cfg)
-
-        const drawX = p.x + p.springOffsetX
-        const drawY = p.y + p.springOffsetY
-
-        // Pre-rendered ring-glow halo + core, cached per (color, size, glow, dpr).
-        // No gradient/arc allocation in this hot path — only a Map lookup + blit.
-        const sprite = getGlowSprite(p.color, p.size, cfg.glowIntensity, dpr)
-        const half = p.size + cfg.glowIntensity
-        ctx.globalAlpha = p.opacity
-        ctx.drawImage(sprite, drawX - half, drawY - half, half * 2, half * 2)
+        drawParticle(ctx, p, cfg, dpr)
       }
 
       ctx.globalAlpha = 1
@@ -152,7 +184,7 @@ export function useParticleLoop(
   const colorsKey = config.colors.join('|')
   useEffect(() => {
     clearSpriteCache()
-  }, [colorsKey, config.minSize, config.maxSize, config.glowIntensity])
+  }, [colorsKey, config.minSize, config.maxSize, config.glowIntensity, config.shape])
 }
 
 function applyMouseInfluence(

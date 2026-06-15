@@ -1,5 +1,7 @@
 import { useRef } from 'react'
 import { useParticleLoop } from './useParticleLoop'
+import type { ParticleShape } from './shapes'
+import type { Particle } from './particles'
 
 export interface CosmicDustCanvasProps {
   /** Number of particles to render. Default: 200 */
@@ -18,6 +20,19 @@ export interface CosmicDustCanvasProps {
   mouseInfluenceRadius?: number
   /** How particles react to the cursor. Default: 'repel' */
   mouseEffect?: 'repel' | 'attract' | 'none'
+  /**
+   * Built-in particle shape. Default: 'circle'. Non-circle shapes share the
+   * circular bounding-radius glow halo (visible in concave regions, e.g.
+   * between star spikes).
+   */
+  shape?: ParticleShape
+  /**
+   * Escape hatch for fully custom drawing. When provided it overrides `shape`
+   * and bypasses the sprite cache: the canvas context is translated to each
+   * particle's position (draw at the origin) with globalAlpha pre-set to the
+   * particle's opacity. `p` is the live particle — read it, don't mutate it.
+   */
+  renderParticle?: (ctx: CanvasRenderingContext2D, p: Particle) => void
   /** className applied to the canvas element */
   className?: string
   /** style applied to the canvas element */
@@ -37,8 +52,10 @@ const DEFAULT_STYLE: React.CSSProperties = {
 
 // Inner component that runs hooks unconditionally — only mounted client-side
 function CosmicDustCanvasInner(
-  props: Required<Omit<CosmicDustCanvasProps, 'className' | 'style'>> &
-    Pick<CosmicDustCanvasProps, 'className' | 'style'>,
+  props: Required<
+    Omit<CosmicDustCanvasProps, 'className' | 'style' | 'renderParticle'>
+  > &
+    Pick<CosmicDustCanvasProps, 'className' | 'style' | 'renderParticle'>,
 ) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
 
@@ -51,6 +68,8 @@ function CosmicDustCanvasInner(
     glowIntensity: props.glowIntensity,
     mouseInfluenceRadius: props.mouseInfluenceRadius,
     mouseEffect: props.mouseEffect,
+    shape: props.shape,
+    renderParticle: props.renderParticle,
   })
 
   return (
@@ -71,6 +90,8 @@ export function CosmicDustCanvas({
   glowIntensity = 15,
   mouseInfluenceRadius = 120,
   mouseEffect = 'repel',
+  shape = 'circle',
+  renderParticle,
   className,
   style,
 }: CosmicDustCanvasProps) {
@@ -88,6 +109,8 @@ export function CosmicDustCanvas({
       glowIntensity={glowIntensity}
       mouseInfluenceRadius={mouseInfluenceRadius}
       mouseEffect={mouseEffect}
+      shape={shape}
+      renderParticle={renderParticle}
       className={className}
       style={style}
     />
