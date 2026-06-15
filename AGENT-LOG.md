@@ -20,3 +20,18 @@ Columns: Date (UTC) | Phase | Step | Framework | AgentName | Parallel | Notes
 | 2026-06-14T12:30:08Z | 1       | 6       | Claude    | general-purpose                       | n        | Verify: negative size + rAF stale cancellation + mousemove leak                  |
 | 2026-06-14T12:30:25Z | 1       | 6       | Claude    | general-purpose                       | n        | Verify: stale closure on prop changes + shadowBlur bleed + untyped params        |
 | 2026-06-14T12:30:38Z | 1       | 6       | Claude    | general-purpose                       | n        | Verify: radialGradient per-frame GC + unbounded spring offset + resize staleness |
+
+| Date | Phase | Step | Framework | AgentName | Parallel | Notes |
+| ---- | ----- | ---- | --------- | --------- | -------- | ----- |
+| 2026-06-14T23:29:38Z | unknown | unknown | Claude | general-purpose | n | Propose v0.2 tooling stacks |
+| 2026-06-14T23:50:00Z | 2 | 3 | VoltAgent | voltagent-qa-sec:code-reviewer | n | Code review Task 001 sprite cache |
+| 2026-06-14T23:56:27Z | 2 | 3 | VoltAgent | voltagent-qa-sec:code-reviewer | n | Re-review Task 001 blocking fixes |
+| 2026-06-15T00:21:52Z | 2 | 4 | VoltAgent | voltagent-qa-sec:code-reviewer | n | Code review Task 002 custom shapes |
+| 2026-06-15T00:30:05Z | 2 | 5 | VoltAgent | voltagent-qa-sec:code-reviewer | n | Code review Task 003 twinkle |
+| 2026-06-15T00:38:18Z | 2 | 6 | VoltAgent | voltagent-qa-sec:code-reviewer | n | Code review Task 004 colour breathing |
+| 2026-06-15T14:33:31Z | 2 | 7 | VoltAgent | voltagent-qa-sec:code-reviewer | n | Code review Task 005 touch support |
+| 2026-06-15T14:50:02Z | 2 | 8 | VoltAgent | voltagent-qa-sec:code-reviewer | n | Code review Task 006 playground + Pages |
+| 2026-06-15T21:05:21Z | 2 | 9 | VoltAgent | voltagent-qa-sec:security-auditor | n | Security audit Task 007 publish workflow |
+| 2026-06-15T21:05:32Z | 2 | 9 | VoltAgent | voltagent-qa-sec:code-reviewer | n | Code review Task 007 publish workflow |
+| 2026-06-15T21:09:28Z | 2 | 9 | VoltAgent | voltagent-qa-sec:security-auditor | n | Re-audit Task 007 HIGH-1 fix |
+| 2026-06-15T21:22:28Z | unknown | unknown | VoltAgent | voltagent-qa-sec:code-reviewer | n | Code review Task 008 release prep |

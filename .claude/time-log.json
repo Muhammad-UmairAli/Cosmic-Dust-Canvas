@@ -214,5 +214,101 @@
     "hours": 0.25,
     "who": "claude",
     "notes": "Bug fix: replaced ctx.shadowBlur with manual radial-gradient glow; doubled spring force + raised clamp for visible mouseInfluenceRadius; all 16 tests pass"
+  },
+  {
+    "datetime": "2026-06-14T13:26:37Z",
+    "phase": "1",
+    "step": "10",
+    "hours": 0.3,
+    "who": "claude",
+    "notes": "npm publish v0.1.0: removed @react-spring/web peerDep, rebuilt dist, Git Flow release branch, tag v0.1.0, back-merge to develop, GitHub Release created"
+  },
+  {
+    "datetime": "2026-06-14T23:22:16Z",
+    "phase": "2",
+    "step": "0",
+    "hours": 0.05,
+    "who": "claude",
+    "notes": "Opened Phase 2 — v0.2-features-and-polish"
+  },
+  {
+    "datetime": "2026-06-14T23:27:30Z",
+    "phase": "2",
+    "step": "1",
+    "hours": 0.4,
+    "who": "claude",
+    "notes": "Hotfix v0.1.1: ring-only glow (evenodd), two-pass draw, version bump, Git Flow hotfix branch, tag, npm publish, back-merge"
+  },
+  {
+    "datetime": "2026-06-14T23:35:31Z",
+    "phase": "2",
+    "step": "2",
+    "hours": 0.6,
+    "who": "claude",
+    "notes": "Phase 2 decomposition: gathered requirements, VoltAgent stack proposal, wrote PRD + EPIC + 8 task files for v0.2.0 (features, docs, CI, perf)"
+  },
+  {
+    "datetime": "2026-06-15T00:00:12Z",
+    "phase": "2",
+    "step": "3",
+    "hours": 0.255348315,
+    "who": "claude",
+    "notes": "Task 001 — sprite pre-render + batched draw loop: new src/sprites.ts (bounded-LRU sprite cache, drawGlowSprite ring-glow halo+core, getGlowSprite keyed by shape·color·size·glow·dpr, clearSpriteCache); refactored useParticleLoop.ts hot path to Map-lookup + drawImage (zero per-frame gradient alloc), dpr re-read + cache-invalidate on resize/zoom; 14 sprite tests added (30 total pass), tsc+eslint clean, build 8.35KB gzip. Code-review gate passed (2 rounds: B1 stale-dpr + B3 cache-bound fixed; minSize/maxSize clear kept per spec)."
+  },
+  {
+    "datetime": "2026-06-15T00:24:26Z",
+    "phase": "2",
+    "step": "4",
+    "hours": 0.1092180163888889,
+    "who": "claude",
+    "notes": "Task 002 — custom shapes: new src/shapes.ts (circle/star/square/triangle path builders + tracePath dispatch); drawGlowSprite now fills the chosen shape (circle byte-identical to v0.1.1); shape + renderParticle added to props/config; renderParticle escape hatch bypasses sprite cache (extracted+exported drawParticle for testability); Particle+ParticleShape exported from index.ts. 41 tests pass (shapes + drawParticle + star-threading), tsc+eslint clean, build 8.71KB gzip. Code-review APPROVED, no blocking; advisory docs/tests folded in."
+  },
+  {
+    "datetime": "2026-06-15T00:32:39Z",
+    "phase": "2",
+    "step": "5",
+    "hours": 0.08181508583333333,
+    "who": "claude",
+    "notes": "Task 003 — twinkle/opacity pulse: Particle gains baseOpacity+twinklePhase (random phase → out-of-sync); applyTwinkle modulates p.opacity via spec formula, clamped [0,1], phase wraps at 2π; twinkle=0 is exact no-op (no phase drift). twinkle prop default 0; sprite cache untouched. 48 tests pass, tsc+eslint clean, build 8.83KB gzip. Code-review: no blocking; advisory phase-modulo + out-of-sync test + doc folded in."
+  },
+  {
+    "datetime": "2026-06-15T00:41:34Z",
+    "phase": "2",
+    "step": "6",
+    "hours": 0.09319685750000001,
+    "who": "claude",
+    "notes": "Task 004 — colour breathing: Particle gains colorIndex+colorPhase (staggered random phase at spawn); applyColorCycle advances each particle through the colors palette (arithmetic/constant-time step, modulo-normalised so a runtime palette shrink can't go out of range; colorCycle=0 is exact no-op). Particles reference per-palette-colour cached sprites → cache stays bounded. colorCycle prop default 0. 56 tests pass, tsc+eslint clean, build 8.x KB gzip. Code-review: no blocking; folded shrink-safety + constant-time + regression tests + doc."
+  },
+  {
+    "datetime": "2026-06-15T14:36:30Z",
+    "phase": "2",
+    "step": "7",
+    "hours": 0.09738008749999999,
+    "who": "claude",
+    "notes": "Task 005 — touch support: touch prop (default true) on props+config; touchstart/touchmove/touchend/touchcancel listeners in the mount effect (stable refs, captured touchEnabled → symmetric add/remove, leak-free) feeding the shared mouseRef influence path; touchmove preventDefault only when mouseEffect!='none', passive:false; touchend releases to offscreen sentinel. README props table brought current (touch+shape+twinkle+colorCycle+renderParticle; fixed stale shadowBlur note). 58 tests pass, tsc+eslint clean. Code-review: ship it, no blocking."
+  },
+  {
+    "datetime": "2026-06-15T20:58:51Z",
+    "phase": "2",
+    "step": "8",
+    "hours": 0.015336839722222223,
+    "who": "claude",
+    "notes": "Task 006 — interactive playground + GitHub Pages: extended demo/ with live controls for every behavioural prop (shape/twinkle/colorCycle/touch + existing), particle+gzip readout, npm-install copy block; demo/vite.config base /Cosmic-Dust-Canvas/ on build; new demo/tsconfig.json + demo:build typecheck gate; .github/workflows/pages.yml (build+deploy to Pages on main, least-priv perms, actionlint clean); gitignore demo/dist. 58 lib tests pass, demo builds with correct base path. Code-review: no blocking findings."
+  },
+  {
+    "datetime": "2026-06-15T21:10:36Z",
+    "phase": "2",
+    "step": "9",
+    "hours": 0.10075408166666668,
+    "who": "claude",
+    "notes": "Task 007 — CI auto-publish on tag: new .github/workflows/publish.yml (v* tag trigger; guard job verifies tag is on main + version unpublished; publish job runs ci/test/build then npm publish --provenance --access public, id-token:write for OIDC). Security audit R=true: HIGH-1 (any tag-pusher could publish) resolved via protected npm-publish Environment + required reviewers (NPM_TOKEN as env secret); MEDIUM-1 (log injection) fixed; MEDIUM-2 (SHA-pin) deferred to backlog w/ risk acceptance. actionlint clean, 58 tests pass. Maintainer must create the npm-publish env w/ reviewers + add NPM_TOKEN."
+  },
+  {
+    "datetime": "2026-06-15T21:21:47Z",
+    "phase": "2",
+    "step": "10",
+    "hours": 0.059605052500000005,
+    "who": "claude",
+    "notes": "Task 008 — release prep v0.2.0: README playground link + 'What's new in v0.2.0' section + star/twinkle/colorCycle example (props table already done in #16); bumped package.json 0.1.1→0.2.0; verified ≤12KB gzip budget (9.21KB ESM); confirmed JSDoc on all 15 props + fixed stale ctx.shadowBlur glowIntensity doc (rebuilt dist .d.ts). 58 tests pass, lint clean. Tag/publish is the separate user-gated release step."
   }
 ]

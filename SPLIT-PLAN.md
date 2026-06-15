@@ -61,6 +61,7 @@ See [`docs/architecture-design-decisions.md`](docs/architecture-design-decisions
 ---
 
 | 2026-06-14 | Phase 1 — react-cosmic-dust-component | PR #1 merged (feature/react-cosmic-dust-component → develop). Shipped cosmic-dust-canvas npm package: Canvas+React+TypeScript particle engine, mouse spring physics (repel/attract/none), manual radial-gradient glow scaling with glowIntensity (0–40), 16 passing Vitest tests, Vite ESM+CJS build at 7.83 KB gzip. Post-merge bug fixes: ctx.shadowBlur replaced with radial-gradient halo (glow now visually responds to slider); spring force doubled + clamp raised (mouseInfluenceRadius clearly perceptible). Files NOT touched: demo/, .github/, docs/methodology/. Unblocks: npm publish to registry, Phase 2 feature work. | (closed) |
+| 2026-06-15 | Phase 2 — v0.2-features-and-polish | IN FLIGHT | (will be filled in at close) |
 ## §6 — Backlog
 
 <!--
@@ -72,4 +73,5 @@ Three rules:
 3. SPLIT-PLAN §6 (backlog) is never modified by an unrelated phase. Stop and ask if tempted.
 -->
 
-_(empty)_
+- **DPR-aware main canvas (retina pass).** Deferred from Phase 2 — Task 001. The main canvas backing store is sized in CSS pixels, not `× devicePixelRatio`, so the dpr-rendered sprites are downsampled to the CSS-pixel grid (preserves v0.1.1 fidelity but wastes sprite resolution). A future pass should scale `canvas.width/height` by dpr and the context via `setTransform`, eliminating the fractional-DPR edge softness noted in `docs/phases/phase-002.md`. Out of scope for Task 001 (would sharpen all output vs. v0.1.1).
+- **SHA-pin GitHub Actions repo-wide + Dependabot.** Deferred from Phase 2 — Task 007 (security audit MEDIUM-2, **risk accepted**). All workflows (`ci.yml`, `pages.yml`, `publish.yml`) pin `actions/*` to mutable major-version tags (`@v4`, etc.) rather than full commit SHAs. For the secret-bearing `publish.yml` this is a (bounded) supply-chain risk. Accepted for now because the actions are first-party `actions/*` and the `npm-publish` environment approval gate inserts a human checkpoint before the token-bearing job runs. A future hardening pass should SHA-pin all workflows and add a `github-actions` Dependabot config to bump them safely (repo-wide, not piecemeal).

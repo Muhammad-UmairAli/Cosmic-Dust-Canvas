@@ -60,4 +60,47 @@ describe('CosmicDustCanvas', () => {
     })
     div.remove()
   })
+
+  const touchEvents = (calls: unknown[][]) =>
+    calls.map((c) => String(c[0])).filter((name) => name.startsWith('touch'))
+
+  it('adds touch listeners by default and removes them on unmount', () => {
+    const addSpy = vi.spyOn(window, 'addEventListener')
+    const removeSpy = vi.spyOn(window, 'removeEventListener')
+    const div = document.createElement('div')
+    document.body.appendChild(div)
+    const root = createRoot(div)
+    act(() => {
+      root.render(<CosmicDustCanvas />)
+    })
+    const added = touchEvents(addSpy.mock.calls)
+    expect(added).toEqual(
+      expect.arrayContaining(['touchstart', 'touchmove', 'touchend', 'touchcancel']),
+    )
+    act(() => {
+      root.unmount()
+    })
+    const removed = touchEvents(removeSpy.mock.calls)
+    // add/remove symmetric — no listener leak
+    expect(removed.sort()).toEqual(added.sort())
+    addSpy.mockRestore()
+    removeSpy.mockRestore()
+    div.remove()
+  })
+
+  it('adds no touch listeners when touch={false}', () => {
+    const addSpy = vi.spyOn(window, 'addEventListener')
+    const div = document.createElement('div')
+    document.body.appendChild(div)
+    const root = createRoot(div)
+    act(() => {
+      root.render(<CosmicDustCanvas touch={false} />)
+    })
+    expect(touchEvents(addSpy.mock.calls)).toHaveLength(0)
+    act(() => {
+      root.unmount()
+    })
+    addSpy.mockRestore()
+    div.remove()
+  })
 })

@@ -2,9 +2,13 @@ import { useEffect, useRef } from 'react'
 import {
   spawnParticles,
   updateParticle,
+  applyTwinkle,
+  applyColorCycle,
   createParticle,
   type Particle,
 } from './particles'
+import { getGlowSprite, clearSpriteCache } from './sprites'
+import type { ParticleShape } from './shapes'
 
 const SPRING_CLAMP = 120
 
@@ -17,6 +21,52 @@ export interface ParticleLoopConfig {
   glowIntensity: number
   mouseInfluenceRadius: number
   mouseEffect: 'repel' | 'attract' | 'none'
+  shape: ParticleShape
+  /** Opacity-pulse strength, 0 = off. Modulates draw-time alpha only. */
+  twinkle: number
+  /** Palette-cycling speed, 0 = off. Particles step through `colors` over time. */
+  colorCycle: number
+  /** Whether touch drag drives the same repel/attract influence as the mouse. */
+  touch: boolean
+  /**
+   * Escape hatch: when set, fully controls per-particle drawing and bypasses
+   * the sprite cache. `ctx` is translated to the particle position (draw at the
+   * origin) with globalAlpha pre-set to the particle's opacity. Overrides `shape`.
+   * `p` is the live simulation particle — read its fields (size, color, opacity,
+   * springOffsetX/Y) but do not mutate it, or you'll corrupt the motion.
+   */
+  renderParticle?: (ctx: CanvasRenderingContext2D, p: Particle) => void
+}
+
+/**
+ * Draws one particle. If `renderParticle` is set it takes precedence (ctx
+ * translated to the particle, alpha pre-applied) and the sprite path is skipped;
+ * otherwise the cached glow sprite for the particle's shape is blitted.
+ */
+export function drawParticle(
+  ctx: CanvasRenderingContext2D,
+  p: Particle,
+  cfg: ParticleLoopConfig,
+  dpr: number,
+): void {
+  const drawX = p.x + p.springOffsetX
+  const drawY = p.y + p.springOffsetY
+
+  if (cfg.renderParticle) {
+    ctx.save()
+    ctx.globalAlpha = p.opacity
+    ctx.translate(drawX, drawY)
+    cfg.renderParticle(ctx, p)
+    ctx.restore()
+    return
+  }
+
+  // Pre-rendered halo + shaped core, cached per (shape, color, size, glow, dpr).
+  // No gradient/arc allocation in this hot path — only a Map lookup + blit.
+  const sprite = getGlowSprite(p.color, p.size, cfg.glowIntensity, dpr, cfg.shape)
+  const half = p.size + cfg.glowIntensity
+  ctx.globalAlpha = p.opacity
+  ctx.drawImage(sprite, drawX - half, drawY - half, half * 2, half * 2)
 }
 
 export function useParticleLoop(
@@ -35,6 +85,9 @@ export function useParticleLoop(
   // Stable handler refs — same function identity across renders, no listener leak
   const onResizeRef = useRef<() => void>(() => undefined)
   const onMouseMoveRef = useRef<(e: MouseEvent) => void>(() => undefined)
+  const onTouchStartRef = useRef<(e: TouchEvent) => void>(() => undefined)
+  const onTouchMoveRef = useRef<(e: TouchEvent) => void>(() => undefined)
+  const onTouchEndRef = useRef<() => void>(() => undefined)
 
   // ── Main rAF loop (mounts once, reads config dynamically via ref) ──────────
   useEffect(() => {
@@ -43,6 +96,11 @@ export function useParticleLoop(
 
     const ctx = canvas.getContext('2d')
     if (!ctx) return
+
+    // Backing resolution for pre-rendered sprites — keeps them crisp on retina.
+    // Re-read on resize: browser zoom / moving to another monitor changes it,
+    // and stale sprites would render blurry until remount.
+    let dpr = window.devicePixelRatio || 1
 
     const setSize = () => {
       const parent = canvas.parentElement
@@ -74,6 +132,11 @@ export function useParticleLoop(
         p.x *= scaleX
         p.y *= scaleY
       }
+      const nextDpr = window.devicePixelRatio || 1
+      if (nextDpr !== dpr) {
+        dpr = nextDpr
+        clearSpriteCache() // rebuild sprites at the new device resolution
+      }
     }
 
     onMouseMoveRef.current = (e: MouseEvent) => {
@@ -81,8 +144,40 @@ export function useParticleLoop(
       mouseRef.current = { x: e.clientX - rect.left, y: e.clientY - rect.top }
     }
 
+    // Touch feeds the same mouseRef influence path as the mouse — spring physics
+    // are shared, no duplication. Read once at mount (matches mousemove).
+    const trackTouch = (t: Touch) => {
+      const rect = canvas.getBoundingClientRect()
+      mouseRef.current = { x: t.clientX - rect.left, y: t.clientY - rect.top }
+    }
+    onTouchStartRef.current = (e: TouchEvent) => {
+      const t = e.touches[0]
+      if (t) trackTouch(t)
+    }
+    onTouchMoveRef.current = (e: TouchEvent) => {
+      const t = e.touches[0]
+      if (!t) return
+      trackTouch(t)
+      // Only swallow the scroll gesture when particles actually react, so we
+      // don't hijack page scroll when mouseEffect is 'none'.
+      if (configRef.current.mouseEffect !== 'none') e.preventDefault()
+    }
+    onTouchEndRef.current = () => {
+      // Release influence when the finger lifts (offscreen sentinel).
+      mouseRef.current = { x: -9999, y: -9999 }
+    }
+
     window.addEventListener('resize', onResizeRef.current)
     window.addEventListener('mousemove', onMouseMoveRef.current)
+
+    // Capture locally so add/remove stay symmetric even if the prop changes.
+    const touchEnabled = configRef.current.touch
+    if (touchEnabled) {
+      window.addEventListener('touchstart', onTouchStartRef.current, { passive: true })
+      window.addEventListener('touchmove', onTouchMoveRef.current, { passive: false })
+      window.addEventListener('touchend', onTouchEndRef.current)
+      window.addEventListener('touchcancel', onTouchEndRef.current)
+    }
 
     const draw = () => {
       const cfg = configRef.current
@@ -91,37 +186,13 @@ export function useParticleLoop(
       for (const p of particlesRef.current) {
         // speed is applied per-frame so slider changes take effect immediately
         updateParticle(p, canvas.width, canvas.height, cfg.speed)
+        applyTwinkle(p, cfg.twinkle)
+        applyColorCycle(p, cfg.colors, cfg.colorCycle)
         applyMouseInfluence(p, mouseRef.current, cfg)
-
-        const drawX = p.x + p.springOffsetX
-        const drawY = p.y + p.springOffsetY
-
-        ctx.save()
-        ctx.globalAlpha = p.opacity
-
-        // Glow halo — ring only (evenodd punches out the core area) so
-        // overlapping halos at high glowIntensity don't accumulate into screen fog.
-        if (cfg.glowIntensity > 0) {
-          const haloR = p.size + cfg.glowIntensity
-          const glow = ctx.createRadialGradient(drawX, drawY, p.size, drawX, drawY, haloR)
-          glow.addColorStop(0, p.color)
-          glow.addColorStop(1, 'transparent')
-          ctx.fillStyle = glow
-          ctx.beginPath()
-          ctx.arc(drawX, drawY, haloR, 0, Math.PI * 2) // outer circle
-          ctx.arc(drawX, drawY, p.size, 0, Math.PI * 2) // inner circle → evenodd hole
-          ctx.fill('evenodd')
-        }
-
-        // Solid particle core
-        ctx.fillStyle = p.color
-        ctx.beginPath()
-        ctx.arc(drawX, drawY, p.size, 0, Math.PI * 2)
-        ctx.fill()
-
-        ctx.restore()
+        drawParticle(ctx, p, cfg, dpr)
       }
 
+      ctx.globalAlpha = 1
       rafRef.current = requestAnimationFrame(draw)
     }
 
@@ -131,6 +202,12 @@ export function useParticleLoop(
       cancelAnimationFrame(rafRef.current)
       window.removeEventListener('resize', onResizeRef.current)
       window.removeEventListener('mousemove', onMouseMoveRef.current)
+      if (touchEnabled) {
+        window.removeEventListener('touchstart', onTouchStartRef.current)
+        window.removeEventListener('touchmove', onTouchMoveRef.current)
+        window.removeEventListener('touchend', onTouchEndRef.current)
+        window.removeEventListener('touchcancel', onTouchEndRef.current)
+      }
     }
   }, [canvasRef])
 
@@ -152,6 +229,13 @@ export function useParticleLoop(
       particlesRef.current = current.slice(0, count)
     }
   }, [config.count])
+
+  // ── Invalidate cached sprites when their visual inputs change ──────────────
+  // colors is joined so a new-but-equal array reference doesn't churn the cache.
+  const colorsKey = config.colors.join('|')
+  useEffect(() => {
+    clearSpriteCache()
+  }, [colorsKey, config.minSize, config.maxSize, config.glowIntensity, config.shape])
 }
 
 function applyMouseInfluence(

@@ -1,6 +1,6 @@
 {
   "name": "cosmic-dust-canvas",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "A reusable React component that renders hundreds of softly glowing particles drifting across the screen and reacting to the user's mouse.",
   "keywords": [
     "react",
@@ -29,6 +29,7 @@
   "scripts": {
     "build": "tsc --noEmit && vite build",
     "demo": "vite demo",
+    "demo:build": "tsc --noEmit -p demo/tsconfig.json && vite build demo",
     "test": "vitest run",
     "test:watch": "vitest",
     "lint": "eslint src --ext .ts,.tsx",

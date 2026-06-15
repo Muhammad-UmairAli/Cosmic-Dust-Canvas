@@ -3,3 +3,9 @@ sandboxes/*/node_modules/
 
 # Kit infrastructure — staged assets used by kit slash commands
 .kit/
+
+# Ephemeral local state — not tracked
+demo/.vite/
+demo/dist/
+.claude/agent-in-flight.json
+.claude/.integrations-wizard-run
