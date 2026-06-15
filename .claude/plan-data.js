@@ -235,6 +235,12 @@ window.PLAN_DATA = {
         "name": "Task 008 — release prep v0.2.0: README playground link + 'What's new in v0.2.0' section + star/twinkle/colorCycle example (props table already done in #16); bumped package.json 0.1.1→0.2.0; verified ≤12KB gzip budget (9.21KB ESM); confirmed JSDoc on all 15 props + fixed stale ctx.shadowBlur glowIntensity doc (rebuilt dist .d.ts). 58 tests pass, lint clean. Tag/publish is the separate user-gated release step.",
         "h_baseline": 1.0,
         "h_ai": 1.0
+      },
+      {
+        "num": "11",
+        "name": "DPR-aware main canvas (retina blur fix): setSize backs canvas at clientW/H × devicePixelRatio + ctx.setTransform(dpr) so drawing stays in CSS coords; clearRect/updateParticle/spawn now use CSS dims; resize re-reads dpr before setSize (also fixes a latent stale-dpr resize bug). Sprites now blit 1:1 into the device-res backing → crisp cores, no browser upscale. Removed the DPR backlog item from SPLIT-PLAN §6. +1 regression test (canvas.width=cssW×dpr, setTransform(dpr) at dpr=2); 59 tests pass, lint clean, build 9.26KB gzip. Code-review: no blocking.",
+        "h_baseline": 0.75,
+        "h_ai": 0.75
       }
     ]
   }
