@@ -7,7 +7,7 @@ const GZIP_LABEL = '≈ 9 KB gzip' // approximate published bundle size
 export default function App() {
   const [count, setCount] = useState(200)
   const [speed, setSpeed] = useState(0.4)
-  const [glowIntensity, setGlowIntensity] = useState(15)
+  const [glowIntensity, setGlowIntensity] = useState(0)
   const [mouseEffect, setMouseEffect] = useState<'repel' | 'attract' | 'none'>('repel')
   const [mouseInfluenceRadius, setMouseInfluenceRadius] = useState(120)
   const [shape, setShape] = useState<ParticleShape>('circle')
