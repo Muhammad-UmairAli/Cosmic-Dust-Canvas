@@ -194,5 +194,16 @@ window.AGENTS_LOG_DATA = [
     "notes": "Code review Task 003 twinkle",
     "end_time": "2026-06-15T00:31:45Z",
     "duration_ms": 100478
+  },
+  {
+    "datetime": "2026-06-15T00:38:18Z",
+    "phase": "2",
+    "step": "6",
+    "framework": "VoltAgent",
+    "agent_name": "voltagent-qa-sec:code-reviewer",
+    "parallel": "n",
+    "notes": "Code review Task 004 colour breathing",
+    "end_time": "2026-06-15T00:39:59Z",
+    "duration_ms": 101821
   }
 ];
