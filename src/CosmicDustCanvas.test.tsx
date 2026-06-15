@@ -3,18 +3,32 @@ import { createRoot } from 'react-dom/client'
 import { act } from 'react'
 import { CosmicDustCanvas } from './CosmicDustCanvas'
 
-beforeEach(() => {
-  HTMLCanvasElement.prototype.getContext = vi.fn().mockReturnValue({
+let ctxMock: ReturnType<typeof makeCtxMock>
+function makeCtxMock() {
+  return {
+    setTransform: vi.fn(),
+    scale: vi.fn(),
     clearRect: vi.fn(),
     save: vi.fn(),
     restore: vi.fn(),
+    translate: vi.fn(),
     beginPath: vi.fn(),
     arc: vi.fn(),
+    rect: vi.fn(),
+    moveTo: vi.fn(),
+    lineTo: vi.fn(),
+    closePath: vi.fn(),
     fill: vi.fn(),
+    drawImage: vi.fn(),
     createRadialGradient: vi.fn().mockReturnValue({ addColorStop: vi.fn() }),
     globalAlpha: 1,
     fillStyle: '',
-  })
+  }
+}
+
+beforeEach(() => {
+  ctxMock = makeCtxMock()
+  HTMLCanvasElement.prototype.getContext = vi.fn().mockReturnValue(ctxMock)
 })
 
 describe('CosmicDustCanvas', () => {
@@ -86,6 +100,33 @@ describe('CosmicDustCanvas', () => {
     addSpy.mockRestore()
     removeSpy.mockRestore()
     div.remove()
+  })
+
+  it('backs the canvas at device resolution and dpr-scales the context (hi-DPI fix)', () => {
+    const origDpr = window.devicePixelRatio
+    Object.defineProperty(window, 'devicePixelRatio', { value: 2, configurable: true })
+    const div = document.createElement('div')
+    Object.defineProperty(div, 'clientWidth', { value: 800, configurable: true })
+    Object.defineProperty(div, 'clientHeight', { value: 600, configurable: true })
+    document.body.appendChild(div)
+    const root = createRoot(div)
+    act(() => {
+      root.render(<CosmicDustCanvas />)
+    })
+    const canvas = div.querySelector('canvas') as HTMLCanvasElement
+    // backing store is CSS size × dpr (so the browser doesn't upscale → blur)
+    expect(canvas.width).toBe(1600)
+    expect(canvas.height).toBe(1200)
+    // context scaled by dpr so drawing stays in CSS coordinates
+    expect(ctxMock.setTransform).toHaveBeenCalledWith(2, 0, 0, 2, 0, 0)
+    act(() => {
+      root.unmount()
+    })
+    div.remove()
+    Object.defineProperty(window, 'devicePixelRatio', {
+      value: origDpr,
+      configurable: true,
+    })
   })
 
   it('adds no touch listeners when touch={false}', () => {
