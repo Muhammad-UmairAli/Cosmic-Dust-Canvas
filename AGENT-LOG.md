@@ -34,3 +34,4 @@ Columns: Date (UTC) | Phase | Step | Framework | AgentName | Parallel | Notes
 | 2026-06-15T21:05:21Z | 2 | 9 | VoltAgent | voltagent-qa-sec:security-auditor | n | Security audit Task 007 publish workflow |
 | 2026-06-15T21:05:32Z | 2 | 9 | VoltAgent | voltagent-qa-sec:code-reviewer | n | Code review Task 007 publish workflow |
 | 2026-06-15T21:09:28Z | 2 | 9 | VoltAgent | voltagent-qa-sec:security-auditor | n | Re-audit Task 007 HIGH-1 fix |
+| 2026-06-15T21:22:28Z | unknown | unknown | VoltAgent | voltagent-qa-sec:code-reviewer | n | Code review Task 008 release prep |

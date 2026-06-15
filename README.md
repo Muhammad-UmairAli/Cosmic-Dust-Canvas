@@ -2,6 +2,18 @@
 
 A lightweight React component that renders hundreds of softly glowing particles drifting across the screen and reacting to the user's mouse. Drop it into any React app as an atmospheric background effect.
 
+**▶ [Live playground](https://muhammad-umairali.github.io/Cosmic-Dust-Canvas/)** — try every prop in the browser.
+
+## What's new in v0.2.0
+
+- **Custom shapes** — `shape="circle" | "star" | "square" | "triangle"`, plus a `renderParticle` escape hatch for fully custom drawing.
+- **Twinkle** — `twinkle` softly pulses particle opacity, out of sync across the field.
+- **Colour breathing** — `colorCycle` slowly steps particles through the `colors` palette.
+- **Touch support** — drag on mobile/tablet drives the same repel/attract influence as the mouse (`touch`, on by default).
+- **Faster rendering** — particles are pre-rendered to cached sprites and blitted, dropping the per-frame draw cost with no change to the default look.
+
+Everything is additive and defaults to v0.1.x behaviour — upgrading changes nothing unless you opt in.
+
 ## Install
 
 ```bash
@@ -78,6 +90,17 @@ The canvas is `position: absolute` and fills its parent by default, so wrap it i
 
 ```tsx
 <CosmicDustCanvas count={80} speed={0.15} glowIntensity={8} mouseEffect="none" />
+```
+
+**Twinkling stars with colour breathing (v0.2.0):**
+
+```tsx
+<CosmicDustCanvas
+  shape="star"
+  twinkle={0.7}
+  colorCycle={0.5}
+  colors={['#ffd93d', '#ff6b6b', '#a78bfa']}
+/>
 ```
 
 ## Peer dependencies
