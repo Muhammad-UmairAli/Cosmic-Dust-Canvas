@@ -27,6 +27,15 @@ export interface CosmicDustCanvasProps {
      */
     twinkle?: number;
     /**
+     * Palette-cycling speed for a colour-breathing effect. 0 = off (default).
+     * Above 0 each particle slowly steps through the `colors` palette over time,
+     * staggered across the field. Particles reuse the per-colour cached sprites,
+     * so the cache stays bounded; needs `colors` to have 2+ entries. Changing the
+     * `colors` prop while cycling resets the sprite cache (a one-frame rebuild) —
+     * don't rapidly animate `colors` itself.
+     */
+    colorCycle?: number;
+    /**
      * Built-in particle shape. Default: 'circle'. Non-circle shapes share the
      * circular bounding-radius glow halo (visible in concave regions, e.g.
      * between star spikes).
@@ -44,4 +53,4 @@ export interface CosmicDustCanvasProps {
     /** style applied to the canvas element */
     style?: React.CSSProperties;
 }
-export declare function CosmicDustCanvas({ count, colors, minSize, maxSize, speed, glowIntensity, mouseInfluenceRadius, mouseEffect, shape, twinkle, renderParticle, className, style, }: CosmicDustCanvasProps): import("react").JSX.Element | null;
+export declare function CosmicDustCanvas({ count, colors, minSize, maxSize, speed, glowIntensity, mouseInfluenceRadius, mouseEffect, shape, twinkle, colorCycle, renderParticle, className, style, }: CosmicDustCanvasProps): import("react").JSX.Element | null;

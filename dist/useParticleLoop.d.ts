@@ -13,6 +13,8 @@ export interface ParticleLoopConfig {
     shape: ParticleShape;
     /** Opacity-pulse strength, 0 = off. Modulates draw-time alpha only. */
     twinkle: number;
+    /** Palette-cycling speed, 0 = off. Particles step through `colors` over time. */
+    colorCycle: number;
     /**
      * Escape hatch: when set, fully controls per-particle drawing and bypasses
      * the sprite cache. `ctx` is translated to the particle position (draw at the

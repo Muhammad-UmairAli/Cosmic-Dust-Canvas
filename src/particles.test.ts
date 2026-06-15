@@ -4,6 +4,7 @@ import {
   spawnParticles,
   updateParticle,
   applyTwinkle,
+  applyColorCycle,
 } from './particles'
 
 const COLORS = ['#ffffff', '#a78bfa', '#60a5fa']
@@ -54,6 +55,17 @@ describe('createParticle', () => {
       expect(p.baseOpacity).toBe(p.opacity)
       expect(p.twinklePhase).toBeGreaterThanOrEqual(0)
       expect(p.twinklePhase).toBeLessThan(Math.PI * 2)
+    }
+  })
+
+  it('seeds colorIndex into the palette with a matching color and staggered phase', () => {
+    for (let i = 0; i < 30; i++) {
+      const p = createParticle(W, H, COLORS, 1, 3)
+      expect(p.colorIndex).toBeGreaterThanOrEqual(0)
+      expect(p.colorIndex).toBeLessThan(COLORS.length)
+      expect(p.color).toBe(COLORS[p.colorIndex])
+      expect(p.colorPhase).toBeGreaterThanOrEqual(0)
+      expect(p.colorPhase).toBeLessThan(1)
     }
   })
 
@@ -174,5 +186,67 @@ describe('applyTwinkle', () => {
       max = Math.max(max, p.opacity)
     }
     expect(max).toBeLessThanOrEqual(0.6 + 1e-9)
+  })
+})
+
+describe('applyColorCycle', () => {
+  it('leaves the colour untouched when colorCycle is 0', () => {
+    const p = createParticle(W, H, COLORS, 1, 3)
+    const { colorIndex, color, colorPhase } = p
+    for (let i = 0; i < 100; i++) applyColorCycle(p, COLORS, 0)
+    expect(p.colorIndex).toBe(colorIndex)
+    expect(p.color).toBe(color)
+    expect(p.colorPhase).toBe(colorPhase)
+  })
+
+  it('keeps colorIndex within [0, colors.length) and re-resolves color', () => {
+    const p = createParticle(W, H, COLORS, 1, 3)
+    for (let i = 0; i < 2000; i++) {
+      applyColorCycle(p, COLORS, 1)
+      expect(p.colorIndex).toBeGreaterThanOrEqual(0)
+      expect(p.colorIndex).toBeLessThan(COLORS.length)
+      expect(p.color).toBe(COLORS[p.colorIndex])
+    }
+  })
+
+  it('eventually advances to the next palette colour', () => {
+    const p = createParticle(W, H, COLORS, 1, 3)
+    p.colorIndex = 0
+    p.colorPhase = 0
+    const start = p.colorIndex
+    for (let i = 0; i < 200; i++) applyColorCycle(p, COLORS, 1)
+    expect(p.colorIndex).not.toBe(start)
+  })
+
+  it('does nothing for a single-colour palette', () => {
+    const p = createParticle(W, H, ['#abc'], 1, 3)
+    for (let i = 0; i < 500; i++) applyColorCycle(p, ['#abc'], 1)
+    expect(p.colorIndex).toBe(0)
+    expect(p.color).toBe('#abc')
+  })
+
+  it('resolves to a valid colour when the palette shrinks at runtime', () => {
+    const p = createParticle(W, H, COLORS, 1, 3)
+    p.colorIndex = 4 // stale index from a previously larger palette
+    const shrunk = ['#a', '#b', '#c']
+    applyColorCycle(p, shrunk, 1)
+    expect(p.colorIndex).toBeLessThan(shrunk.length)
+    expect(shrunk).toContain(p.color)
+  })
+
+  it('keeps a stale index valid when the palette shrinks to one colour', () => {
+    const p = createParticle(W, H, COLORS, 1, 3)
+    p.colorIndex = 2
+    applyColorCycle(p, ['#solo'], 1)
+    expect(p.color).toBe('#solo') // no freeze on a removed colour
+  })
+
+  it('advances in constant time for a huge colorCycle (no runaway loop)', () => {
+    const p = createParticle(W, H, COLORS, 1, 3)
+    applyColorCycle(p, COLORS, 1e9)
+    expect(p.colorIndex).toBeGreaterThanOrEqual(0)
+    expect(p.colorIndex).toBeLessThan(COLORS.length)
+    expect(p.colorPhase).toBeGreaterThanOrEqual(0)
+    expect(p.colorPhase).toBeLessThan(1)
   })
 })

@@ -205,6 +205,12 @@ window.PLAN_DATA = {
         "name": "Task 003 — twinkle/opacity pulse: Particle gains baseOpacity+twinklePhase (random phase → out-of-sync); applyTwinkle modulates p.opacity via spec formula, clamped [0,1], phase wraps at 2π; twinkle=0 is exact no-op (no phase drift). twinkle prop default 0; sprite cache untouched. 48 tests pass, tsc+eslint clean, build 8.83KB gzip. Code-review: no blocking; advisory phase-modulo + out-of-sync test + doc folded in.",
         "h_baseline": 1.0,
         "h_ai": 1.0
+      },
+      {
+        "num": "6",
+        "name": "Task 004 — colour breathing: Particle gains colorIndex+colorPhase (staggered random phase at spawn); applyColorCycle advances each particle through the colors palette (arithmetic/constant-time step, modulo-normalised so a runtime palette shrink can't go out of range; colorCycle=0 is exact no-op). Particles reference per-palette-colour cached sprites → cache stays bounded. colorCycle prop default 0. 56 tests pass, tsc+eslint clean, build 8.x KB gzip. Code-review: no blocking; folded shrink-safety + constant-time + regression tests + doc.",
+        "h_baseline": 1.5,
+        "h_ai": 1.5
       }
     ]
   }
