@@ -1,0 +1,105 @@
+name: Publish to npm
+
+# Publishes the package to npm with provenance when a v* tag is pushed.
+#
+# ONE-TIME MAINTAINER SETUP (required before the first release):
+#   1. Create a protected GitHub Environment named `npm-publish`
+#      (Settings → Environments) with the release maintainer(s) as REQUIRED
+#      REVIEWERS. This forces a human approval before each publish runs.
+#   2. Add the npm token as an ENVIRONMENT secret named NPM_TOKEN on that
+#      environment (NOT a repo-wide secret) — a granular, publish-only,
+#      single-package automation token with 2FA-bypass for automation.
+# Scoping the token to the protected environment means the publish step cannot
+# read it until a maintainer approves the run, so a tag pushed by anyone else
+# cannot trigger an unauthorized release. The token value is never committed.
+#
+# Optional defence-in-depth: add a tag ruleset (Settings → Rules) targeting
+# refs/tags/v* with a `creation` rule and maintainer-only bypass, so only
+# maintainers can create v* tags in the first place.
+#
+# Release flow (Git Flow): merge release/X.Y.Z into main, tag the merge vX.Y.Z,
+# push the tag. The guard job ensures we only publish tags that land on main and
+# whose version isn't already on the registry.
+
+on:
+  push:
+    tags: ['v*']
+
+# Default to read-only; the publish job opts into id-token for OIDC provenance.
+permissions:
+  contents: read
+
+jobs:
+  guard:
+    name: Guard release tag
+    runs-on: ubuntu-latest
+    outputs:
+      publish: ${{ steps.check.outputs.publish }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # full history so we can test ancestry against main
+
+      - name: Verify tag is on main and version is unpublished
+        id: check
+        run: |
+          set -euo pipefail
+          git fetch --no-tags origin main
+
+          if git merge-base --is-ancestor "$GITHUB_SHA" FETCH_HEAD; then
+            on_main=true
+          else
+            on_main=false
+          fi
+
+          # name/version come from the repo's own package.json, never the
+          # (attacker-influenceable) tag name — no injection surface.
+          name="$(node -p "require('./package.json').name")"
+          version="$(node -p "require('./package.json').version")"
+          if [ -n "$(npm view "${name}@${version}" version 2>/dev/null || true)" ]; then
+            unpublished=false
+          else
+            unpublished=true
+          fi
+
+          if [ "$on_main" = true ] && [ "$unpublished" = true ]; then
+            publish=true
+          else
+            publish=false
+          fi
+          echo "publish=${publish}" >> "$GITHUB_OUTPUT"
+
+          # Surface the decision in the run summary so a skipped publish is
+          # visible without digging through logs.
+          {
+            echo "### npm publish guard"
+            echo ""
+            echo "- tag commit on main: \`${on_main}\`"
+            echo "- \`${name}@${version}\` unpublished: \`${unpublished}\`"
+            echo "- **decision → publish: \`${publish}\`**"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+  publish:
+    name: Publish
+    needs: guard
+    if: needs.guard.outputs.publish == 'true'
+    runs-on: ubuntu-latest
+    # Protected environment: NPM_TOKEN lives here and a required reviewer must
+    # approve the run, so only a maintainer can authorize an actual release.
+    environment: npm-publish
+    permissions:
+      contents: read
+      id-token: write # required for npm provenance attestation via OIDC
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          registry-url: 'https://registry.npmjs.org'
+          cache: npm
+      - run: npm ci
+      - run: npm test
+      - run: npm run build
+      - run: npm publish --provenance --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

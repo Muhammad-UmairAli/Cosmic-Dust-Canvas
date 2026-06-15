@@ -223,6 +223,12 @@ window.PLAN_DATA = {
         "name": "Task 006 — interactive playground + GitHub Pages: extended demo/ with live controls for every behavioural prop (shape/twinkle/colorCycle/touch + existing), particle+gzip readout, npm-install copy block; demo/vite.config base /Cosmic-Dust-Canvas/ on build; new demo/tsconfig.json + demo:build typecheck gate; .github/workflows/pages.yml (build+deploy to Pages on main, least-priv perms, actionlint clean); gitignore demo/dist. 58 lib tests pass, demo builds with correct base path. Code-review: no blocking findings.",
         "h_baseline": 2.0,
         "h_ai": 2.0
+      },
+      {
+        "num": "9",
+        "name": "Task 007 — CI auto-publish on tag: new .github/workflows/publish.yml (v* tag trigger; guard job verifies tag is on main + version unpublished; publish job runs ci/test/build then npm publish --provenance --access public, id-token:write for OIDC). Security audit R=true: HIGH-1 (any tag-pusher could publish) resolved via protected npm-publish Environment + required reviewers (NPM_TOKEN as env secret); MEDIUM-1 (log injection) fixed; MEDIUM-2 (SHA-pin) deferred to backlog w/ risk acceptance. actionlint clean, 58 tests pass. Maintainer must create the npm-publish env w/ reviewers + add NPM_TOKEN.",
+        "h_baseline": 1.5,
+        "h_ai": 1.5
       }
     ]
   }
