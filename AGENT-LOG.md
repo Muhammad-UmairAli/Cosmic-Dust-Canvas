@@ -26,3 +26,5 @@ Columns: Date (UTC) | Phase | Step | Framework | AgentName | Parallel | Notes
 | 2026-06-14T23:29:38Z | unknown | unknown | Claude | general-purpose | n | Propose v0.2 tooling stacks |
 | 2026-06-14T23:50:00Z | 2 | 3 | VoltAgent | voltagent-qa-sec:code-reviewer | n | Code review Task 001 sprite cache |
 | 2026-06-14T23:56:27Z | 2 | 3 | VoltAgent | voltagent-qa-sec:code-reviewer | n | Re-review Task 001 blocking fixes |
+| 2026-06-15T00:21:52Z | 2 | 4 | VoltAgent | voltagent-qa-sec:code-reviewer | n | Code review Task 002 custom shapes |
+| 2026-06-15T00:30:05Z | 2 | 5 | VoltAgent | voltagent-qa-sec:code-reviewer | n | Code review Task 003 twinkle |
