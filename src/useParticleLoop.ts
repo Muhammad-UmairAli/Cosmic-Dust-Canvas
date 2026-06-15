@@ -104,10 +104,17 @@ export function useParticleLoop(
 
     const setSize = () => {
       const parent = canvas.parentElement
-      canvasSizeRef.current.w = parent ? parent.clientWidth : window.innerWidth
-      canvasSizeRef.current.h = parent ? parent.clientHeight : window.innerHeight
-      canvas.width = canvasSizeRef.current.w
-      canvas.height = canvasSizeRef.current.h
+      const w = parent ? parent.clientWidth : window.innerWidth
+      const h = parent ? parent.clientHeight : window.innerHeight
+      canvasSizeRef.current.w = w
+      canvasSizeRef.current.h = h
+      // Back the canvas at DEVICE resolution so the browser doesn't upscale
+      // (blur) it on hi-DPI screens; the CSS display size stays 100% via the
+      // element's style. Drawing code works in CSS px via the dpr transform.
+      canvas.width = Math.round(w * dpr)
+      canvas.height = Math.round(h * dpr)
+      // Setting canvas.width resets all ctx state, so (re)apply the transform here.
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
     }
 
     setSize()
@@ -115,27 +122,29 @@ export function useParticleLoop(
     const { count, colors, minSize, maxSize } = configRef.current
     particlesRef.current = spawnParticles(
       count,
-      canvas.width,
-      canvas.height,
+      canvasSizeRef.current.w,
+      canvasSizeRef.current.h,
       colors,
       minSize,
       maxSize,
     )
 
     onResizeRef.current = () => {
-      const prevW = canvas.width
-      const prevH = canvas.height
-      setSize()
-      const scaleX = canvas.width / prevW
-      const scaleY = canvas.height / prevH
-      for (const p of particlesRef.current) {
-        p.x *= scaleX
-        p.y *= scaleY
-      }
+      const prevW = canvasSizeRef.current.w
+      const prevH = canvasSizeRef.current.h
+      // Re-read dpr first (zoom / monitor change) so setSize backs at the new
+      // resolution; invalidate sprites built at the old dpr.
       const nextDpr = window.devicePixelRatio || 1
       if (nextDpr !== dpr) {
         dpr = nextDpr
-        clearSpriteCache() // rebuild sprites at the new device resolution
+        clearSpriteCache()
+      }
+      setSize()
+      const scaleX = prevW > 0 ? canvasSizeRef.current.w / prevW : 1
+      const scaleY = prevH > 0 ? canvasSizeRef.current.h / prevH : 1
+      for (const p of particlesRef.current) {
+        p.x *= scaleX
+        p.y *= scaleY
       }
     }
 
@@ -181,11 +190,14 @@ export function useParticleLoop(
 
     const draw = () => {
       const cfg = configRef.current
-      ctx.clearRect(0, 0, canvas.width, canvas.height)
+      // CSS dims (not canvas.width/height, which are now device px) — the ctx is
+      // dpr-scaled, so all drawing/physics works in CSS coordinates.
+      const { w, h } = canvasSizeRef.current
+      ctx.clearRect(0, 0, w, h)
 
       for (const p of particlesRef.current) {
         // speed is applied per-frame so slider changes take effect immediately
-        updateParticle(p, canvas.width, canvas.height, cfg.speed)
+        updateParticle(p, w, h, cfg.speed)
         applyTwinkle(p, cfg.twinkle)
         applyColorCycle(p, cfg.colors, cfg.colorCycle)
         applyMouseInfluence(p, mouseRef.current, cfg)
