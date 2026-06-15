@@ -15,6 +15,8 @@ export interface ParticleLoopConfig {
     twinkle: number;
     /** Palette-cycling speed, 0 = off. Particles step through `colors` over time. */
     colorCycle: number;
+    /** Whether touch drag drives the same repel/attract influence as the mouse. */
+    touch: boolean;
     /**
      * Escape hatch: when set, fully controls per-particle drawing and bypasses
      * the sprite cache. `ctx` is translated to the particle position (draw at the

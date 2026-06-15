@@ -26,6 +26,8 @@ export interface ParticleLoopConfig {
   twinkle: number
   /** Palette-cycling speed, 0 = off. Particles step through `colors` over time. */
   colorCycle: number
+  /** Whether touch drag drives the same repel/attract influence as the mouse. */
+  touch: boolean
   /**
    * Escape hatch: when set, fully controls per-particle drawing and bypasses
    * the sprite cache. `ctx` is translated to the particle position (draw at the
@@ -83,6 +85,9 @@ export function useParticleLoop(
   // Stable handler refs — same function identity across renders, no listener leak
   const onResizeRef = useRef<() => void>(() => undefined)
   const onMouseMoveRef = useRef<(e: MouseEvent) => void>(() => undefined)
+  const onTouchStartRef = useRef<(e: TouchEvent) => void>(() => undefined)
+  const onTouchMoveRef = useRef<(e: TouchEvent) => void>(() => undefined)
+  const onTouchEndRef = useRef<() => void>(() => undefined)
 
   // ── Main rAF loop (mounts once, reads config dynamically via ref) ──────────
   useEffect(() => {
@@ -139,8 +144,40 @@ export function useParticleLoop(
       mouseRef.current = { x: e.clientX - rect.left, y: e.clientY - rect.top }
     }
 
+    // Touch feeds the same mouseRef influence path as the mouse — spring physics
+    // are shared, no duplication. Read once at mount (matches mousemove).
+    const trackTouch = (t: Touch) => {
+      const rect = canvas.getBoundingClientRect()
+      mouseRef.current = { x: t.clientX - rect.left, y: t.clientY - rect.top }
+    }
+    onTouchStartRef.current = (e: TouchEvent) => {
+      const t = e.touches[0]
+      if (t) trackTouch(t)
+    }
+    onTouchMoveRef.current = (e: TouchEvent) => {
+      const t = e.touches[0]
+      if (!t) return
+      trackTouch(t)
+      // Only swallow the scroll gesture when particles actually react, so we
+      // don't hijack page scroll when mouseEffect is 'none'.
+      if (configRef.current.mouseEffect !== 'none') e.preventDefault()
+    }
+    onTouchEndRef.current = () => {
+      // Release influence when the finger lifts (offscreen sentinel).
+      mouseRef.current = { x: -9999, y: -9999 }
+    }
+
     window.addEventListener('resize', onResizeRef.current)
     window.addEventListener('mousemove', onMouseMoveRef.current)
+
+    // Capture locally so add/remove stay symmetric even if the prop changes.
+    const touchEnabled = configRef.current.touch
+    if (touchEnabled) {
+      window.addEventListener('touchstart', onTouchStartRef.current, { passive: true })
+      window.addEventListener('touchmove', onTouchMoveRef.current, { passive: false })
+      window.addEventListener('touchend', onTouchEndRef.current)
+      window.addEventListener('touchcancel', onTouchEndRef.current)
+    }
 
     const draw = () => {
       const cfg = configRef.current
@@ -165,6 +202,12 @@ export function useParticleLoop(
       cancelAnimationFrame(rafRef.current)
       window.removeEventListener('resize', onResizeRef.current)
       window.removeEventListener('mousemove', onMouseMoveRef.current)
+      if (touchEnabled) {
+        window.removeEventListener('touchstart', onTouchStartRef.current)
+        window.removeEventListener('touchmove', onTouchMoveRef.current)
+        window.removeEventListener('touchend', onTouchEndRef.current)
+        window.removeEventListener('touchcancel', onTouchEndRef.current)
+      }
     }
   }, [canvasRef])
 

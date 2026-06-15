@@ -205,5 +205,16 @@ window.AGENTS_LOG_DATA = [
     "notes": "Code review Task 004 colour breathing",
     "end_time": "2026-06-15T00:39:59Z",
     "duration_ms": 101821
+  },
+  {
+    "datetime": "2026-06-15T14:33:31Z",
+    "phase": "2",
+    "step": "7",
+    "framework": "VoltAgent",
+    "agent_name": "voltagent-qa-sec:code-reviewer",
+    "parallel": "n",
+    "notes": "Code review Task 005 touch support",
+    "end_time": "2026-06-15T14:34:40Z",
+    "duration_ms": 69156
   }
 ];

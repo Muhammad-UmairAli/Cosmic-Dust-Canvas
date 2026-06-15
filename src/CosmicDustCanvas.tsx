@@ -21,6 +21,12 @@ export interface CosmicDustCanvasProps {
   /** How particles react to the cursor. Default: 'repel' */
   mouseEffect?: 'repel' | 'attract' | 'none'
   /**
+   * Whether touch drag on mobile/tablet drives the same repel/attract influence
+   * as the mouse. Default: true. Touchmove calls preventDefault (suppressing
+   * page scroll) only while mouseEffect is not 'none'.
+   */
+  touch?: boolean
+  /**
    * Opacity-pulse strength for a shimmering effect. Useful range [0, 1]:
    * 0 = off (default), 1 = each particle softly pulses between full and dim,
    * out of sync with the others. Values are clamp-safe but > 1 just floors
@@ -85,6 +91,7 @@ function CosmicDustCanvasInner(
     glowIntensity: props.glowIntensity,
     mouseInfluenceRadius: props.mouseInfluenceRadius,
     mouseEffect: props.mouseEffect,
+    touch: props.touch,
     shape: props.shape,
     twinkle: props.twinkle,
     colorCycle: props.colorCycle,
@@ -109,6 +116,7 @@ export function CosmicDustCanvas({
   glowIntensity = 15,
   mouseInfluenceRadius = 120,
   mouseEffect = 'repel',
+  touch = true,
   shape = 'circle',
   twinkle = 0,
   colorCycle = 0,
@@ -130,6 +138,7 @@ export function CosmicDustCanvas({
       glowIntensity={glowIntensity}
       mouseInfluenceRadius={mouseInfluenceRadius}
       mouseEffect={mouseEffect}
+      touch={touch}
       shape={shape}
       twinkle={twinkle}
       colorCycle={colorCycle}

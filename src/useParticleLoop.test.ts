@@ -29,6 +29,7 @@ const makeCfg = (over: Partial<ParticleLoopConfig> = {}): ParticleLoopConfig => 
   glowIntensity: 10,
   mouseInfluenceRadius: 120,
   mouseEffect: 'none',
+  touch: true,
   shape: 'circle',
   twinkle: 0,
   colorCycle: 0,

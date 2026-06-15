@@ -19,6 +19,12 @@ export interface CosmicDustCanvasProps {
     /** How particles react to the cursor. Default: 'repel' */
     mouseEffect?: 'repel' | 'attract' | 'none';
     /**
+     * Whether touch drag on mobile/tablet drives the same repel/attract influence
+     * as the mouse. Default: true. Touchmove calls preventDefault (suppressing
+     * page scroll) only while mouseEffect is not 'none'.
+     */
+    touch?: boolean;
+    /**
      * Opacity-pulse strength for a shimmering effect. Useful range [0, 1]:
      * 0 = off (default), 1 = each particle softly pulses between full and dim,
      * out of sync with the others. Values are clamp-safe but > 1 just floors
@@ -53,4 +59,4 @@ export interface CosmicDustCanvasProps {
     /** style applied to the canvas element */
     style?: React.CSSProperties;
 }
-export declare function CosmicDustCanvas({ count, colors, minSize, maxSize, speed, glowIntensity, mouseInfluenceRadius, mouseEffect, shape, twinkle, colorCycle, renderParticle, className, style, }: CosmicDustCanvasProps): import("react").JSX.Element | null;
+export declare function CosmicDustCanvas({ count, colors, minSize, maxSize, speed, glowIntensity, mouseInfluenceRadius, mouseEffect, touch, shape, twinkle, colorCycle, renderParticle, className, style, }: CosmicDustCanvasProps): import("react").JSX.Element | null;

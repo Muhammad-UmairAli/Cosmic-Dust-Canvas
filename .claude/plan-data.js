@@ -211,6 +211,12 @@ window.PLAN_DATA = {
         "name": "Task 004 — colour breathing: Particle gains colorIndex+colorPhase (staggered random phase at spawn); applyColorCycle advances each particle through the colors palette (arithmetic/constant-time step, modulo-normalised so a runtime palette shrink can't go out of range; colorCycle=0 is exact no-op). Particles reference per-palette-colour cached sprites → cache stays bounded. colorCycle prop default 0. 56 tests pass, tsc+eslint clean, build 8.x KB gzip. Code-review: no blocking; folded shrink-safety + constant-time + regression tests + doc.",
         "h_baseline": 1.5,
         "h_ai": 1.5
+      },
+      {
+        "num": "7",
+        "name": "Task 005 — touch support: touch prop (default true) on props+config; touchstart/touchmove/touchend/touchcancel listeners in the mount effect (stable refs, captured touchEnabled → symmetric add/remove, leak-free) feeding the shared mouseRef influence path; touchmove preventDefault only when mouseEffect!='none', passive:false; touchend releases to offscreen sentinel. README props table brought current (touch+shape+twinkle+colorCycle+renderParticle; fixed stale shadowBlur note). 58 tests pass, tsc+eslint clean. Code-review: ship it, no blocking.",
+        "h_baseline": 1.0,
+        "h_ai": 1.0
       }
     ]
   }
